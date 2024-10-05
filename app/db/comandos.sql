@@ -6,7 +6,8 @@ CREATE TABLE Efeito (
 
 CREATE TABLE Tipo (
 	id SERIAL PRIMARY KEY,
-	nome varchar(30)
+	nome varchar(30),
+	cor varchar(8)
 );
 
 CREATE TABLE Habilidade (
