@@ -4,17 +4,24 @@
 // usuario
 // senha
 
-$endereco = "localhost";
-$nomebd = "pokedexbd";
-$usuario = "postgres";
-$senha = "002045";
+// $endereco = "localhost";
+// $nomebd = "pokedexbd";
+// $usuario = "postgres";
+// $senha = "002045";
 
-try{
-    $conn = new PDO("pgsql:host=$endereco;dbname=$nomebd", $usuario, $senha);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo "Conectado com sucesso";
-} catch(PDOException $e){
-    echo "Erro: " . $e->getMessage();
-}
+// try{
+//     $conn = new PDO("pgsql:host=$endereco;dbname=$nomebd", $usuario, $senha);
+//     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+//     echo "Conectado com sucesso";
+// } catch(PDOException $e){
+//     echo "Erro: " . $e->getMessage();
+// }
+
+// usando a classe DBConnection
+require_once 'app/connection/DBConnection.php';
+
+$conn = DBConnection::getInstance()->getConnection();
+
+
 
 ?>
