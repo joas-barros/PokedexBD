@@ -16,31 +16,31 @@ class EfeitoRepository implements RepositoryInterface {
         $result = $stmt->fetchAll();
         $efeitos = [];
         foreach($result as $row){
-            $efeitos[] = new Efeito($row['id'], $row['nome'], $row['descricao']);
+            $efeitos[] = new Efeito($row['id_efeito'], $row['nome_efeito'], $row['informacao_efeito']);
         }
         return $efeitos;
     }
 
     public function findById(int $id): ?Efeito {
-        $stmt = $this->pdo->prepare("SELECT * FROM " . self::TABLE . " WHERE id = :id");
+        $stmt = $this->pdo->prepare("SELECT * FROM " . self::TABLE . " WHERE id_efeito = :id");
         $stmt->bindParam(':id', $id);
         $stmt->execute();
         $row = $stmt->fetch();
         if($row === false){
             return null;
         }
-        return new Efeito($row['id'], $row['nome'], $row['descricao']);
+        return new Efeito($row['id_efeito'], $row['nome_efeito'], $row['informacao_efeito']);
     }
 
     public function save($obj): void {
-        $stmt = $this->pdo->prepare("INSERT INTO " . self::TABLE . " (nome, informacao) VALUES (:nome, :descricao)");
+        $stmt = $this->pdo->prepare("INSERT INTO " . self::TABLE . " (nome_efeito, informacao_efeito) VALUES (:nome, :descricao)");
         $stmt->bindParam(':nome', $obj->getNome());
         $stmt->bindParam(':descricao', $obj->getInformacao());
         $stmt->execute();
     }
 
     public function update($obj): void {
-        $stmt = $this->pdo->prepare("UPDATE " . self::TABLE . " SET nome = :nome, informacao = :descricao WHERE id = :id");
+        $stmt = $this->pdo->prepare("UPDATE " . self::TABLE . " SET nome_efeito = :nome, informacao_efeito = :descricao WHERE id_efeito = :id");
         $stmt->bindParam(':id', $obj->getId());
         $stmt->bindParam(':nome', $obj->getNome());
         $stmt->bindParam(':descricao', $obj->getInformacao());
@@ -48,7 +48,7 @@ class EfeitoRepository implements RepositoryInterface {
     }
 
     public function delete(int $id): void {
-        $stmt = $this->pdo->prepare("DELETE FROM " . self::TABLE . " WHERE id = :id");
+        $stmt = $this->pdo->prepare("DELETE FROM " . self::TABLE . " WHERE id_efeito = :id");
         $stmt->bindParam(':id', $id);
         $stmt->execute();
     }
