@@ -1,5 +1,5 @@
 <?php 
-class Tipo {
+class Tipo implements JsonSerializable {
     private int $id;
     private string $nome;
     private string $cor;
@@ -32,6 +32,14 @@ class Tipo {
 
     public function setCor(string $cor): void {
         $this->cor = $cor;
+    }
+
+    public function jsonSerialize(){
+        return [
+            'id' => $this->id,
+            'nome' => $this->nome,
+            'cor' => $this->cor
+        ];
     }
 }
 ?>

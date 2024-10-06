@@ -1,6 +1,6 @@
 <?php 
 
-class Habilidade {
+class Habilidade implements JsonSerializable {
     private int $id;
     private string $nome;
     private string $descricao;
@@ -53,6 +53,16 @@ class Habilidade {
 
     public function setTipo(Tipo $tipo): void {
         $this->tipo = $tipo;
+    }
+
+    public function jsonSerialize(){
+        return [
+            'id' => $this->id,
+            'nome' => $this->nome,
+            'descricao' => $this->descricao,
+            'efeito' => $this->efeito,
+            'tipo' => $this->tipo
+        ];
     }
 }
 

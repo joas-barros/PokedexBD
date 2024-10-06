@@ -1,6 +1,6 @@
 <?php 
 
-class Efeito {
+class Efeito implements JsonSerializable {
     private int $id;
     private string $nome;
     private string $informacao;
@@ -33,6 +33,14 @@ class Efeito {
 
     public function setInformacao(string $informacao): void {
         $this->informacao = $informacao;
+    }
+
+    public function jsonSerialize(){
+        return [
+            'id' => $this->id,
+            'nome' => $this->nome,
+            'informacao' => $this->informacao
+        ];
     }
 }
 ?>

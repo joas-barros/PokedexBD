@@ -17,11 +17,10 @@
 //     echo "Erro: " . $e->getMessage();
 // }
 
-// usando a classe DBConnection
-require_once 'app/connection/DBConnection.php';
+// testando o TipoResource
+require_once 'app/controllers/resources/TipoResource.php';
 
-$conn = DBConnection::getInstance()->getConnection();
-
-
+$tipoResource = new TipoResource();
+$tipoResource->findAll();
 
 ?>
