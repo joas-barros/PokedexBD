@@ -2,6 +2,7 @@
 
 require_once 'app/model/repository/RepositoryInterface.php';
 require_once 'app/connection/DBConnection.php';
+require_once 'app/model/entities/Tipo.php';
 
 class TipoRepository implements RepositoryInterface {
     private PDO $pdo;
@@ -42,15 +43,21 @@ class TipoRepository implements RepositoryInterface {
         $stmt->execute();
     }
 
-    public function update($obj): void {
+    public function update($obj): ?Tipo {
         $id = $obj->getId();
         $nome = $obj->getNome();
         $cor = $obj->getCor();
+
+        if($this->findById($id) === null){
+            return null;
+        }
+
         $stmt = $this->pdo->prepare("UPDATE " . self::TABLE . " SET nome_tipo = :nome, cor_tipo = :cor WHERE id_tipo = :id");
         $stmt->bindParam(':id', $id);
         $stmt->bindParam(':nome', $nome);
         $stmt->bindParam(':cor', $cor);
         $stmt->execute();
+        return $obj;
     }
 
     public function delete(int $id): void {

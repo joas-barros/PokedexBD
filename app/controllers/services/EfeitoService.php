@@ -1,28 +1,26 @@
 <?php 
-require_once 'app/model/repository/impl/TipoRepository.php';
-require_once 'app/model/entities/Tipo.php';
 
-class TipoService{
-    private TipoRepository $tipoRepository;
+class EfeitoService{
+    private EfeitoRepository $efeitoRepository;
 
     public function __construct(){
-        $this->tipoRepository = new TipoRepository();
+        $this->efeitoRepository = new EfeitoRepository();
     }
 
     public function findAll(){
-        $tipos = $this->tipoRepository->findAll();
-        echo json_encode($tipos);
+        $efeitos = $this->efeitoRepository->findAll();
+        echo json_encode($efeitos);
     }
 
     public function findById($id){
-        $tipo = $this->tipoRepository->findById($id);
-        if ($tipo){
-            echo json_encode($tipo);
+        $efeito = $this->efeitoRepository->findById($id);
+        if ($efeito){
+            echo json_encode($efeito);
         } else {
             http_response_code(404);
             echo json_encode([
                 'status' => 'error',
-                'message' => 'Tipo não encontrado'
+                'message' => 'Efeito não encontrado'
             ]);
         }
     }
@@ -30,20 +28,20 @@ class TipoService{
     public function save(){
         $input = json_decode(file_get_contents('php://input'), true);
 
-        if (isset($input['nome']) && isset($input['cor'])){
-            $novoTipo = new Tipo($input['id'], $input['nome'], $input['cor']);
-            if($novoTipo){
-                $this->tipoRepository->save($novoTipo);
+        if (isset($input['nome']) && isset($input['informacao']) && isset($input['id'])){
+            $novoEfeito = new Efeito($input['id'], $input['nome'], $input['informacao']);
+            if($novoEfeito){
+                $this->efeitoRepository->save($novoEfeito);
                 http_response_code(201);
                 echo json_encode([
                     'status' => 'success',
-                    'message' => 'Tipo criado com sucesso'
+                    'message' => 'Efeito criado com sucesso'
                 ]);
             } else {
                 http_response_code(500);
                 echo json_encode([
                     'status' => 'error',
-                    'message' => 'Erro ao criar tipo'
+                    'message' => 'Erro ao criar efeito'
                 ]);
             }
         } else {
@@ -58,28 +56,28 @@ class TipoService{
     public function update(){
         $input = json_decode(file_get_contents('php://input'), true);
 
-        if (isset($input['id']) && isset($input['nome']) && isset($input['cor'])){
-            $tipo = new Tipo($input['id'], $input['nome'], $input['cor']);
-            if($tipo){
-                $tipoAtualizado = $this->tipoRepository->update($tipo);
-                if (!$tipoAtualizado){
+        if (isset($input['id']) && isset($input['nome']) && isset($input['informacao'])){
+            $efeito = new Efeito($input['id'], $input['nome'], $input['informacao']);
+            if($efeito){
+                $efeitoAtualizado = $this->efeitoRepository->update($efeito);
+                if ($efeitoAtualizado){
+                    http_response_code(200);
+                    echo json_encode([
+                        'status' => 'success',
+                        'message' => 'Efeito atualizado com sucesso'
+                    ]);
+                } else {
                     http_response_code(404);
                     echo json_encode([
                         'status' => 'error',
-                        'message' => 'Tipo não encontrado'
+                        'message' => 'Efeito nao encontrado'
                     ]);
-                } else {
-                http_response_code(200);
-                echo json_encode([
-                    'status' => 'success',
-                    'message' => 'Tipo atualizado com sucesso'
-                ]);
                 }
             } else {
                 http_response_code(500);
                 echo json_encode([
                     'status' => 'error',
-                    'message' => 'Erro ao atualizar tipo'
+                    'message' => 'Erro ao atualizar efeito'
                 ]);
             }
         } else {
@@ -92,19 +90,19 @@ class TipoService{
     }
 
     public function delete($id){
-        $tipo = $this->tipoRepository->findById($id);
-        if ($tipo){
-            $this->tipoRepository->delete($id);
+        $efeito = $this->efeitoRepository->findById($id);
+        if ($efeito){
+            $this->efeitoRepository->delete($id);
             http_response_code(200);
             echo json_encode([
                 'status' => 'success',
-                'message' => 'Tipo deletado com sucesso'
+                'message' => 'Efeito deletado com sucesso'
             ]);
         } else {
             http_response_code(404);
             echo json_encode([
                 'status' => 'error',
-                'message' => 'Tipo não encontrado'
+                'message' => 'Efeito não encontrado'
             ]);
         }
     }
@@ -116,6 +114,6 @@ class TipoService{
             "message" => "Método não permitido."
         ]);
     }
-    
+
 }
 ?>

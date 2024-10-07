@@ -1,5 +1,8 @@
 <?php 
+header("Content-Type: application/json; charset=UTF-8");
+
 require_once 'app/controllers/resources/TipoResource.php';
+require_once 'app/controllers/resources/EfeitoResource.php';
 // criando os endpoints
 
 // Obter a URL requisitada
@@ -27,8 +30,22 @@ $id = isset($uri_parts[1]) ? $uri_parts[1] : null;
 $method = $_SERVER['REQUEST_METHOD'];
 $id = $_GET['id'] ?? null;
 
+// switch ($resource) {
+//     case 'tipos':
+//         $controller = new TipoResource();
+//         $controller->handleRequest($method, $id);
+//         break;
+//     default:
+//         http_response_code(404);
+//         echo json_encode([
+//             'status' => 'error',
+//             'message' => 'Recurso não encontrado'
+//         ]);
+//         break;
+// }
+
 // Instanciar o controller
-$controller = new TipoResource();
+$controller = new EfeitoResource();
 $controller->handleRequest($method, $id);
 
 

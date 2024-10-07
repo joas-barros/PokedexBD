@@ -1,6 +1,7 @@
 <?php 
 require_once 'app/model/repository/RepositoryInterface.php';
 require_once 'app/connection/DBConnection.php';
+require_once 'app/model/entities/Efeito.php';
 
 class EfeitoRepository implements RepositoryInterface {
     private PDO $pdo;
@@ -33,18 +34,27 @@ class EfeitoRepository implements RepositoryInterface {
     }
 
     public function save($obj): void {
+        $nome = $obj->getNome();
+        $descricao = $obj->getInformacao();
         $stmt = $this->pdo->prepare("INSERT INTO " . self::TABLE . " (nome_efeito, informacao_efeito) VALUES (:nome, :descricao)");
-        $stmt->bindParam(':nome', $obj->getNome());
-        $stmt->bindParam(':descricao', $obj->getInformacao());
+        $stmt->bindParam(':nome', $nome);
+        $stmt->bindParam(':descricao', $descricao);
         $stmt->execute();
     }
 
-    public function update($obj): void {
+    public function update($obj): ?Efeito {
+        $id = $obj->getId();
+        $nome = $obj->getNome();
+        $descricao = $obj->getInformacao();
+        if($this->findById($id) === null){
+            return null;
+        }
         $stmt = $this->pdo->prepare("UPDATE " . self::TABLE . " SET nome_efeito = :nome, informacao_efeito = :descricao WHERE id_efeito = :id");
-        $stmt->bindParam(':id', $obj->getId());
-        $stmt->bindParam(':nome', $obj->getNome());
-        $stmt->bindParam(':descricao', $obj->getInformacao());
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':nome', $nome);
+        $stmt->bindParam(':descricao', $descricao);
         $stmt->execute();
+        return $obj;
     }
 
     public function delete(int $id): void {
