@@ -1,26 +1,40 @@
 <?php 
 
+require_once 'app/model/repository/impl/TipoRepository.php';
 require_once 'app/controllers/services/TipoService.php';
-require_once 'app/model/entities/Tipo.php';
 
-// deve monstar as rotas de acesso para o service
-
-class TipoResource {
-    // Definindo rotas de acesso para os services
+class TipoResource{
     private TipoService $tipoService;
 
     public function __construct(){
         $this->tipoService = new TipoService();
     }
 
-    // função que chama o finaAll do service e retorna um json com os dados
-    public function findAll(){
-        $tipos = $this->tipoService->findAll();
-        $tiposArray = [];
-        foreach($tipos as $tipo){
-            $tiposArray[] = $tipo->jsonSerialize();
+    public function handleRequest($method, $id = null){
+        switch($method){
+            case 'GET':
+                if($id){
+                    $this->tipoService->findById($id);
+                } else {
+                    $this->tipoService->findAll();
+                }
+                break;
+            case 'POST':
+                $this->tipoService->save();
+                break;
+            case 'PUT':
+                $this->tipoService->update($id);
+                break;
+            case 'DELETE':
+                if ($id){
+                    $this->tipoService->delete($id);
+                } else {
+                    $this->tipoService->respondMethodNotAllowed();
+                }
+                break;
+            default:
+                $this->tipoService->respondMethodNotAllowed();
         }
-        echo json_encode($tiposArray, JSON_PRETTY_PRINT);
     }
 }
 ?>

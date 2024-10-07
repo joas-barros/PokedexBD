@@ -34,17 +34,22 @@ class TipoRepository implements RepositoryInterface {
     }
 
     public function save($obj): void {
+        $nome = $obj->getNome();
+        $cor = $obj->getCor();
         $stmt = $this->pdo->prepare("INSERT INTO " . self::TABLE . " (nome_tipo, cor_tipo) VALUES (:nome, :cor)");
-        $stmt->bindParam(':nome', $obj->getNome());
-        $stmt->bindParam(':cor', $obj->getCor());
+        $stmt->bindParam(':nome', $nome);
+        $stmt->bindParam(':cor', $cor);
         $stmt->execute();
     }
 
     public function update($obj): void {
+        $id = $obj->getId();
+        $nome = $obj->getNome();
+        $cor = $obj->getCor();
         $stmt = $this->pdo->prepare("UPDATE " . self::TABLE . " SET nome_tipo = :nome, cor_tipo = :cor WHERE id_tipo = :id");
-        $stmt->bindParam(':id', $obj->getId());
-        $stmt->bindParam(':nome', $obj->getNome());
-        $stmt->bindParam(':cor', $obj->getCor());
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':nome', $nome);
+        $stmt->bindParam(':cor', $cor);
         $stmt->execute();
     }
 

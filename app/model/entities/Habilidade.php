@@ -60,8 +60,8 @@ class Habilidade implements JsonSerializable {
             'id' => $this->id,
             'nome' => $this->nome,
             'descricao' => $this->descricao,
-            'efeito' => $this->efeito,
-            'tipo' => $this->tipo
+            'efeito' => $this->efeito->jsonSerialize(),
+            'tipo' => $this->tipo->jsonSerialize()
         ];
     }
 }

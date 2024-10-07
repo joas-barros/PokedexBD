@@ -11,7 +11,6 @@ final class DBConnection {
         try{
             $this->conn = new PDO("pgsql:host=$this->endereco;dbname=$this->nomebd", $this->usuario, $this->senha);
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            echo "Conectado com sucesso";
         } catch(PDOException $e){
             echo "Erro: " . $e->getMessage();
         }

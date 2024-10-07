@@ -1,11 +1,6 @@
 <?php 
-
-require_once 'app/model/entities/Tipo.php';
 require_once 'app/model/repository/impl/TipoRepository.php';
-
-// Descrição a classe deve receber os metodos do repository e retornar json nos métodos de get, ja nos métodos de post, put e delete deve retornar um status code
-// sendo que nos de post e put deve receber um json e transformar em objeto para ser salvo no banco
-
+require_once 'app/model/entities/Tipo.php';
 
 class TipoService{
     private TipoRepository $tipoRepository;
@@ -14,25 +9,105 @@ class TipoService{
         $this->tipoRepository = new TipoRepository();
     }
 
-    public function findAll(): array {
-        return $this->tipoRepository->findAll();
+    public function findAll(){
+        $tipos = $this->tipoRepository->findAll();
+        echo json_encode($tipos);
     }
 
-    public function findById(int $id): ?Tipo {
-        return $this->tipoRepository->findById($id);
+    public function findById($id){
+        $tipo = $this->tipoRepository->findById($id);
+        if ($tipo){
+            echo json_encode($tipo);
+        } else {
+            http_response_code(404);
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Tipo não encontrado'
+            ]);
+        }
     }
 
-    public function save($obj): void {
-        $this->tipoRepository->save($obj);
+    public function save(){
+        $input = json_decode(file_get_contents('php://input'), true);
+
+        if (isset($input['nome']) && isset($input['cor'])){
+            $novoTipo = new Tipo($input['id'], $input['nome'], $input['cor']);
+            if($novoTipo){
+                $this->tipoRepository->save($novoTipo);
+                http_response_code(201);
+                echo json_encode([
+                    'status' => 'success',
+                    'message' => 'Tipo criado com sucesso'
+                ]);
+            } else {
+                http_response_code(500);
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'Erro ao criar tipo'
+                ]);
+            }
+        } else {
+            http_response_code(400);
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Dados incompletos'
+            ]);
+        }
     }
 
-    public function update($obj): void {
-        $this->tipoRepository->update($obj);
+    public function update(){
+        $input = json_decode(file_get_contents('php://input'), true);
+
+        if (isset($input['id']) && isset($input['nome']) && isset($input['cor'])){
+            $tipo = new Tipo($input['id'], $input['nome'], $input['cor']);
+            if($tipo){
+                $this->tipoRepository->update($tipo);
+                http_response_code(200);
+                echo json_encode([
+                    'status' => 'success',
+                    'message' => 'Tipo atualizado com sucesso'
+                ]);
+            } else {
+                http_response_code(500);
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'Erro ao atualizar tipo'
+                ]);
+            }
+        } else {
+            http_response_code(400);
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Dados incompletos'
+            ]);
+        }
     }
 
-    public function delete(int $id): void {
-        $this->tipoRepository->delete($id);
+    public function delete($id){
+        $tipo = $this->tipoRepository->findById($id);
+        if ($tipo){
+            $this->tipoRepository->delete($id);
+            http_response_code(200);
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Tipo deletado com sucesso'
+            ]);
+        } else {
+            http_response_code(404);
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Tipo não encontrado'
+            ]);
+        }
     }
+
+    public function respondMethodNotAllowed() {
+        http_response_code(405);
+        echo json_encode([
+            "status" => "error",
+            "message" => "Método não permitido."
+        ]);
+    }
+    
 }
-
 ?>
