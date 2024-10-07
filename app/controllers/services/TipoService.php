@@ -31,7 +31,7 @@ class TipoService{
         $input = json_decode(file_get_contents('php://input'), true);
 
         if (isset($input['nome']) && isset($input['cor'])){
-            $novoTipo = new Tipo($input['id'], $input['nome'], $input['cor']);
+            $novoTipo = new Tipo(0, $input['nome'], $input['cor']);
             if($novoTipo){
                 $this->tipoRepository->save($novoTipo);
                 http_response_code(201);

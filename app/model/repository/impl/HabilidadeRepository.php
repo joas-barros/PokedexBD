@@ -38,22 +38,40 @@ class HabilidadeRepository implements RepositoryInterface {
     }
 
     public function save($obj): void {
+
+        $nome = $obj->getNome();
+        $descricao = $obj->getDescricao();
+        $efeito = $obj->getEfeito()->getId();
+        $tipo = $obj->getTipo()->getId();
+
         $stmt = $this->pdo->prepare("INSERT INTO " . self::TABLE . " (nome_habilidade, descricao_habilidade, efeito_habilidade, tipo_habilidade) VALUES (:nome, :descricao, :efeito, :tipo)");
-        $stmt->bindParam(':nome', $obj->getNome());
-        $stmt->bindParam(':descricao', $obj->getDescricao());
-        $stmt->bindParam(':efeito', $obj->getEfeito()->getId());
-        $stmt->bindParam(':tipo', $obj->getTipo()->getId());
+        $stmt->bindParam(':nome', $nome);
+        $stmt->bindParam(':descricao', $descricao);
+        $stmt->bindParam(':efeito', $efeito);
+        $stmt->bindParam(':tipo', $tipo);
         $stmt->execute();
     }
 
-    public function update($obj): void {
+    public function update($obj): ?Habilidade {
+
+        $id = $obj->getId();
+        if($this->findById($id) === null){
+            return null;
+        }
+        $nome = $obj->getNome();
+        $descricao = $obj->getDescricao();
+        $efeito = $obj->getEfeito()->getId();
+        $tipo = $obj->getTipo()->getId();
+
         $stmt = $this->pdo->prepare("UPDATE " . self::TABLE . " SET nome_habilidade = :nome, descricao_habilidade = :descricao, efeito_habilidade = :efeito, tipo_habilidade = :tipo WHERE id_habilidade = :id");
-        $stmt->bindParam(':id', $obj->getId());
-        $stmt->bindParam(':nome', $obj->getNome());
-        $stmt->bindParam(':descricao', $obj->getDescricao());
-        $stmt->bindParam(':efeito', $obj->getEfeito()->getId());
-        $stmt->bindParam(':tipo', $obj->getTipo()->getId());
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':nome', $nome);
+        $stmt->bindParam(':descricao', $descricao);
+        $stmt->bindParam(':efeito', $efeito);
+        $stmt->bindParam(':tipo', $tipo);
         $stmt->execute();
+
+        return $obj;
     }
 
     public function delete(int $id): void {

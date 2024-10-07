@@ -4,7 +4,7 @@ class Tipo implements JsonSerializable {
     private string $nome;
     private string $cor;
 
-    public function __construct(int $id, string $nome, string $cor){
+    public function __construct(int $id = 0, string $nome, string $cor){
         $this->id = $id;
         $this->nome = $nome;
         $this->cor = $cor;

@@ -7,7 +7,7 @@ class Habilidade implements JsonSerializable {
     private Efeito $efeito;
     private Tipo $tipo;
 
-    public function __construct(int $id, string $nome, string $descricao, Efeito $efeito, Tipo $tipo){
+    public function __construct(int $id = 0, string $nome, string $descricao, Efeito $efeito, Tipo $tipo){
         $this->id = $id;
         $this->nome = $nome;
         $this->descricao = $descricao;

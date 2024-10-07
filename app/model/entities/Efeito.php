@@ -5,7 +5,7 @@ class Efeito implements JsonSerializable {
     private string $nome;
     private string $informacao;
 
-    public function __construct(int $id, string $nome, string $informacao){
+    public function __construct(int $id = 0, string $nome, string $informacao){
         $this->id = $id;
         $this->nome = $nome;
         $this->informacao = $informacao;
