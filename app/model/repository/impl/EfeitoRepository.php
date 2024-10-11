@@ -42,19 +42,26 @@ class EfeitoRepository implements RepositoryInterface {
         $stmt->execute();
     }
 
-    public function update($obj): ?Efeito {
-        $id = $obj->getId();
-        $nome = $obj->getNome();
-        $descricao = $obj->getInformacao();
-        if($this->findById($id) === null){
+    public function update(int $id, $obj): ?Efeito {
+        
+        $efeitoAtualizado = $this->findById($id);
+
+        if($efeitoAtualizado === null){
             return null;
         }
+
+        $efeitoAtualizado->setNome($obj->getNome());
+        $efeitoAtualizado->setInformacao($obj->getInformacao());
+
+        $nome = $efeitoAtualizado->getNome();
+        $descricao = $efeitoAtualizado->getInformacao();
+
         $stmt = $this->pdo->prepare("UPDATE " . self::TABLE . " SET nome_efeito = :nome, informacao_efeito = :descricao WHERE id_efeito = :id");
         $stmt->bindParam(':id', $id);
         $stmt->bindParam(':nome', $nome);
         $stmt->bindParam(':descricao', $descricao);
         $stmt->execute();
-        return $obj;
+        return $efeitoAtualizado;
     }
 
     public function delete(int $id): void {

@@ -22,7 +22,11 @@ class HabilidadeResource{
                 $this->habilidadeService->save();
                 break;
             case 'PUT':
-                $this->habilidadeService->update($id);
+                if ($id){
+                    $this->habilidadeService->update($id);
+                } else {
+                    $this->habilidadeService->respondMethodNotAllowed();
+                }
                 break;
             case 'DELETE':
                 if ($id){

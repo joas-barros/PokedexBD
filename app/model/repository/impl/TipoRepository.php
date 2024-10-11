@@ -43,21 +43,25 @@ class TipoRepository implements RepositoryInterface {
         $stmt->execute();
     }
 
-    public function update($obj): ?Tipo {
-        $id = $obj->getId();
-        $nome = $obj->getNome();
-        $cor = $obj->getCor();
+    public function update(int $id, $tipo): ?Tipo {
 
-        if($this->findById($id) === null){
+        $tipoAtualizado = $this->findById($id);
+        if($tipoAtualizado === null){
             return null;
         }
+
+        $tipoAtualizado->setNome($tipo->getNome());
+        $tipoAtualizado->setCor($tipo->getCor());
+
+        $nome = $tipoAtualizado->getNome();
+        $cor = $tipoAtualizado->getCor();
 
         $stmt = $this->pdo->prepare("UPDATE " . self::TABLE . " SET nome_tipo = :nome, cor_tipo = :cor WHERE id_tipo = :id");
         $stmt->bindParam(':id', $id);
         $stmt->bindParam(':nome', $nome);
         $stmt->bindParam(':cor', $cor);
         $stmt->execute();
-        return $obj;
+        return $tipoAtualizado;
     }
 
     public function delete(int $id): void {

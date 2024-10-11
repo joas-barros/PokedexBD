@@ -68,17 +68,17 @@ class HabilidadeService{
         }
     }
 
-    public function update(){
+    public function update(int $id){
         $input = json_decode(file_get_contents('php://input'), true);
 
-        if (isset($input['id']) && isset($input['nome']) && isset($input['descricao']) && isset($input['tipo']) && isset($input['efeito'])){
+        if (isset($input['nome']) && isset($input['descricao']) && isset($input['tipo']) && isset($input['efeito'])){
             $tipo = $this->tipoRepository->findById($input['tipo']);
             $efeito = $this->efeitoRepository->findById($input['efeito']);
             
             if($tipo && $efeito){
                 $habilidade = new Habilidade($input['id'], $input['nome'], $input['descricao'], $efeito, $tipo);
-                $this->habilidadeRepository->update($habilidade);
-                if ($habilidade){
+                $habilidadeNova = $this->habilidadeRepository->update($id, $habilidade);
+                if ($habilidadeNova){
                     http_response_code(200);
                     echo json_encode([
                         'status' => 'success',

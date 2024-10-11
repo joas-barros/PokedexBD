@@ -55,13 +55,13 @@ class TipoService{
         }
     }
 
-    public function update(){
+    public function update(int $id){
         $input = json_decode(file_get_contents('php://input'), true);
 
-        if (isset($input['id']) && isset($input['nome']) && isset($input['cor'])){
-            $tipo = new Tipo($input['id'], $input['nome'], $input['cor']);
+        if (isset($input['nome']) && isset($input['cor'])){
+            $tipo = new Tipo($id, $input['nome'], $input['cor']);
             if($tipo){
-                $tipoAtualizado = $this->tipoRepository->update($tipo);
+                $tipoAtualizado = $this->tipoRepository->update($id, $tipo);
                 if (!$tipoAtualizado){
                     http_response_code(404);
                     echo json_encode([

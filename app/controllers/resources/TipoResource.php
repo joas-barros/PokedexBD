@@ -23,7 +23,11 @@ class TipoResource{
                 $this->tipoService->save();
                 break;
             case 'PUT':
-                $this->tipoService->update($id);
+                if ($id){
+                    $this->tipoService->update($id);
+                } else {
+                    $this->tipoService->respondMethodNotAllowed();
+                }
                 break;
             case 'DELETE':
                 if ($id){

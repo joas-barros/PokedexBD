@@ -53,13 +53,13 @@ class EfeitoService{
         }
     }
 
-    public function update(){
+    public function update(int $id){
         $input = json_decode(file_get_contents('php://input'), true);
 
-        if (isset($input['id']) && isset($input['nome']) && isset($input['informacao'])){
-            $efeito = new Efeito($input['id'], $input['nome'], $input['informacao']);
+        if (isset($input['nome']) && isset($input['informacao'])){
+            $efeito = new Efeito($id, $input['nome'], $input['informacao']);
             if($efeito){
-                $efeitoAtualizado = $this->efeitoRepository->update($efeito);
+                $efeitoAtualizado = $this->efeitoRepository->update($id, $efeito);
                 if ($efeitoAtualizado){
                     http_response_code(200);
                     echo json_encode([

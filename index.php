@@ -46,7 +46,7 @@ $id = $_GET['id'] ?? null;
 // }
 
 // Instanciar o controller
-$controller = new HabilidadeResource();
+$controller = new EfeitoResource();
 $controller->handleRequest($method, $id);
 
 

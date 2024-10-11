@@ -52,7 +52,7 @@ class HabilidadeRepository implements RepositoryInterface {
         $stmt->execute();
     }
 
-    public function update($obj): ?Habilidade {
+    public function update(int $id, $obj): ?Habilidade {
 
         $id = $obj->getId();
         if($this->findById($id) === null){
