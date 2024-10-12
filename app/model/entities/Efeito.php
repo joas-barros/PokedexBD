@@ -35,7 +35,7 @@ class Efeito implements JsonSerializable {
         $this->informacao = $informacao;
     }
 
-    public function jsonSerialize(){
+    public function jsonSerialize(): array{
         return [
             'id' => $this->id,
             'nome' => $this->nome,

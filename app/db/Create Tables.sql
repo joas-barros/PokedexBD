@@ -4,6 +4,9 @@ Tipo_Nome Text,
 Cor Text NOT NULL
 );
 
+insert into tipo (Tipo_Nome, Cor) values ('fogo', '#FF0000');
+select * from tipo;
+
 CREATE TABLE FRAQUEZAS(
 Fraquezas_ID Int NOT NULL,
 Fraquezas_A_TIPO_ID INT NOT NULL,
@@ -18,6 +21,9 @@ Efeito_Nome Text,
 Efeito_Info Text NOT NULL
 );
 
+insert into efeito (efeito_nome, efeito_info) values ('Stun', 'Deixa atordoado');
+select * from efeito;
+
 CREATE TABLE HABILIDADE(
 Habilidade_ID Serial PRIMARY KEY,
 Habilidade_Tipo Int, 
@@ -27,6 +33,8 @@ Habilidade_Efeito Int,
 CONSTRAINT FK_TIPO FOREIGN KEY (Habilidade_Tipo) REFERENCES TIPO(Tipo_ID) ON DELETE RESTRICT ON UPDATE CASCADE,
 CONSTRAINT FK_EFEITO FOREIGN KEY (Habilidade_Efeito) REFERENCES EFEITO(Efeito_ID) ON DELETE RESTRICT ON UPDATE CASCADE
 );
+
+insert into HABILIDADE(Habilidade_Tipo, Habilidade_Nome, Habilidade_Descricao, Habilidade_Efeito) values (2, 'Choque do trovão', 'Da um choque e é do trovão', 1);
 
 CREATE TABLE POKEDEX(
 Pokedex_Num Serial PRIMARY KEY,

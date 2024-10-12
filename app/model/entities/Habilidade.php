@@ -55,7 +55,7 @@ class Habilidade implements JsonSerializable {
         $this->tipo = $tipo;
     }
 
-    public function jsonSerialize(){
+    public function jsonSerialize(): array{
         return [
             'id' => $this->id,
             'nome' => $this->nome,

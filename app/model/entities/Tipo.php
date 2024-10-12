@@ -34,7 +34,7 @@ class Tipo implements JsonSerializable {
         $this->cor = $cor;
     }
 
-    public function jsonSerialize(){
+    public function jsonSerialize(): array{
         return [
             'id' => $this->id,
             'nome' => $this->nome,

@@ -4,6 +4,7 @@ header("Content-Type: application/json; charset=UTF-8");
 require_once 'app/controllers/resources/TipoResource.php';
 require_once 'app/controllers/resources/EfeitoResource.php';
 require_once 'app/controllers/resources/HabilidadeResource.php';
+require_once 'app/controllers/resources/PokedexResource.php';
 // criando os endpoints
 
 // Obter a URL requisitada
@@ -46,7 +47,7 @@ $id = $_GET['id'] ?? null;
 // }
 
 // Instanciar o controller
-$controller = new HabilidadeResource();
+$controller = new PokedexResource();
 $controller->handleRequest($method, $id);
 
 
