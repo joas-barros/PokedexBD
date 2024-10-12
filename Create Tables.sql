@@ -109,10 +109,17 @@ CONSTRAINT FK_POKEMON_ID FOREIGN KEY(Pokemon_ID) REFERENCES POKEDEX(POKEDEX_NUM)
 CONSTRAINT FK_TREINADOR_ID FOREIGN KEY(Treinador_ID) REFERENCES TREINADOR(TREINADOR_ID) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
---Tabela para arquivo de log e arquivo PDF
-CREATE TABLE CAPTURADOS(
+--Tabela para arquivo de capturados e arquivo PDF
+CREATE TABLE CAPTURADOS_LOG(
 Treinador_Nome Text,
 Pokemon_Nome Text,
 Data_Captura Date,
 Hora_Captura Time
+);
+
+--Tabela usada como arquivo log
+CREATE TABLE ADMIN_LOG(
+data date,
+usuario varchar(15),
+modificacao varchar(6)
 );

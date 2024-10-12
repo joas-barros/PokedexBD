@@ -28,8 +28,22 @@ END;
 $kgParaLbs$
 LANGUAGE 'plpgsql';
 
---Ao inserir Pokemons na tabela registro_pokedex, insere automaticamente no arquivo de log
+--Ao inserir Pokemons na tabela registro_pokedex, insere automaticamente no arquivo de pokemons capturados
 CREATE OR REPLACE RULE R1 AS
 ON INSERT TO Registro_Pokedex
 DO INSERT INTO Capturados VALUES
 (retornaNomeTreinador(New.Treinador_Id), retornaNomePokemon(New.Pokemon_Id), now(), now());
+
+--Função para popular tabela de log
+CREATE FUNCTION func_log() RETURNS trigger AS $$
+BEGIN
+INSERT INTO criando_um_log(data, usuario, modificacao)
+VALUES (now(), user, TG_OP);
+RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+--Trigger para popular tabela de log
+CREATE TRIGGER teste_log
+AFTER INSERT OR UPDATE OR DELETE ON pokedex
+FOR EACH ROW EXECUTE PROCEDURE func_log();
