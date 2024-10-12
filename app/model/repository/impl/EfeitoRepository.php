@@ -17,26 +17,26 @@ class EfeitoRepository implements RepositoryInterface {
         $result = $stmt->fetchAll();
         $efeitos = [];
         foreach($result as $row){
-            $efeitos[] = new Efeito($row['id_efeito'], $row['nome_efeito'], $row['informacao_efeito']);
+            $efeitos[] = new Efeito($row['efeito_id'], $row['efeito_nome'], $row['efeito_info']);
         }
         return $efeitos;
     }
 
     public function findById(int $id): ?Efeito {
-        $stmt = $this->pdo->prepare("SELECT * FROM " . self::TABLE . " WHERE id_efeito = :id");
+        $stmt = $this->pdo->prepare("SELECT * FROM " . self::TABLE . " WHERE Efeito_ID = :id");
         $stmt->bindParam(':id', $id);
         $stmt->execute();
         $row = $stmt->fetch();
         if($row === false){
             return null;
         }
-        return new Efeito($row['id_efeito'], $row['nome_efeito'], $row['informacao_efeito']);
+        return new Efeito($row['efeito_id'], $row['efeito_nome'], $row['efeito_info']);
     }
 
     public function save($obj): void {
         $nome = $obj->getNome();
         $descricao = $obj->getInformacao();
-        $stmt = $this->pdo->prepare("INSERT INTO " . self::TABLE . " (nome_efeito, informacao_efeito) VALUES (:nome, :descricao)");
+        $stmt = $this->pdo->prepare("INSERT INTO " . self::TABLE . " (Efeito_Nome, Efeito_Info) VALUES (:nome, :descricao)");
         $stmt->bindParam(':nome', $nome);
         $stmt->bindParam(':descricao', $descricao);
         $stmt->execute();
@@ -56,7 +56,7 @@ class EfeitoRepository implements RepositoryInterface {
         $nome = $efeitoAtualizado->getNome();
         $descricao = $efeitoAtualizado->getInformacao();
 
-        $stmt = $this->pdo->prepare("UPDATE " . self::TABLE . " SET nome_efeito = :nome, informacao_efeito = :descricao WHERE id_efeito = :id");
+        $stmt = $this->pdo->prepare("UPDATE " . self::TABLE . " SET Efeito_Nome = :nome, Efeito_Info = :descricao WHERE Efeito_ID = :id");
         $stmt->bindParam(':id', $id);
         $stmt->bindParam(':nome', $nome);
         $stmt->bindParam(':descricao', $descricao);
@@ -65,7 +65,7 @@ class EfeitoRepository implements RepositoryInterface {
     }
 
     public function delete(int $id): void {
-        $stmt = $this->pdo->prepare("DELETE FROM " . self::TABLE . " WHERE id_efeito = :id");
+        $stmt = $this->pdo->prepare("DELETE FROM " . self::TABLE . " WHERE Efeito_ID = :id");
         $stmt->bindParam(':id', $id);
         $stmt->execute();
     }

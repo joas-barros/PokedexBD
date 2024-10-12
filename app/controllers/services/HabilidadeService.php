@@ -76,7 +76,7 @@ class HabilidadeService{
             $efeito = $this->efeitoRepository->findById($input['efeito']);
             
             if($tipo && $efeito){
-                $habilidade = new Habilidade($input['id'], $input['nome'], $input['descricao'], $efeito, $tipo);
+                $habilidade = new Habilidade($id, $input['nome'], $input['descricao'], $efeito, $tipo);
                 $habilidadeNova = $this->habilidadeRepository->update($id, $habilidade);
                 if ($habilidadeNova){
                     http_response_code(200);

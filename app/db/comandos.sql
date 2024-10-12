@@ -30,3 +30,8 @@ INSERT INTO Habilidade (nome_habilidade, tipo_habilidade, descricao_habilidade, 
 SELECT * FROM habilidade INNER JOIN tipo ON habilidade.tipo_habilidade = tipo.id_tipo INNER JOIN efeito ON habilidade.efeito_habilidade = efeito.id_efeito; 
 
 select * from tipo;
+
+drop table efeito;
+drop table habilidade;
+drop table tipo;
+

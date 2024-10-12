@@ -18,26 +18,26 @@ class TipoRepository implements RepositoryInterface {
         $result = $stmt->fetchAll();
         $tipos = [];
         foreach($result as $row){
-            $tipos[] = new Tipo($row['id_tipo'], $row['nome_tipo'], $row['cor_tipo']);
+            $tipos[] = new Tipo($row['tipo_id'], $row['tipo_nome'], $row['cor']);
         }
         return $tipos;
     }
 
     public function findById(int $id): ?Tipo {
-        $stmt = $this->pdo->prepare("SELECT * FROM " . self::TABLE . " WHERE id_tipo = :id");
+        $stmt = $this->pdo->prepare("SELECT * FROM " . self::TABLE . " WHERE Tipo_ID = :id");
         $stmt->bindParam(':id', $id);
         $stmt->execute();
         $row = $stmt->fetch();
         if($row === false){
             return null;
         }
-        return new Tipo($row['id_tipo'], $row['nome_tipo'], $row['cor_tipo']);
+        return new Tipo($row['tipo_id'], $row['tipo_nome'], $row['cor']);
     }
 
     public function save($obj): void {
         $nome = $obj->getNome();
         $cor = $obj->getCor();
-        $stmt = $this->pdo->prepare("INSERT INTO " . self::TABLE . " (nome_tipo, cor_tipo) VALUES (:nome, :cor)");
+        $stmt = $this->pdo->prepare("INSERT INTO " . self::TABLE . " (Tipo_Nome, Cor) VALUES (:nome, :cor)");
         $stmt->bindParam(':nome', $nome);
         $stmt->bindParam(':cor', $cor);
         $stmt->execute();
@@ -56,7 +56,7 @@ class TipoRepository implements RepositoryInterface {
         $nome = $tipoAtualizado->getNome();
         $cor = $tipoAtualizado->getCor();
 
-        $stmt = $this->pdo->prepare("UPDATE " . self::TABLE . " SET nome_tipo = :nome, cor_tipo = :cor WHERE id_tipo = :id");
+        $stmt = $this->pdo->prepare("UPDATE " . self::TABLE . " SET Tipo_Nome = :nome, Cor = :cor WHERE Tipo_ID = :id");
         $stmt->bindParam(':id', $id);
         $stmt->bindParam(':nome', $nome);
         $stmt->bindParam(':cor', $cor);
@@ -65,7 +65,7 @@ class TipoRepository implements RepositoryInterface {
     }
 
     public function delete(int $id): void {
-        $stmt = $this->pdo->prepare("DELETE FROM " . self::TABLE . " WHERE id_tipo = :id");
+        $stmt = $this->pdo->prepare("DELETE FROM " . self::TABLE . " WHERE Tipo_ID = :id");
         $stmt->bindParam(':id', $id);
         $stmt->execute();
     }
