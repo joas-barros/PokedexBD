@@ -96,7 +96,7 @@ Treinador_Nome Text NOT NULL
 
 CREATE TABLE REGISTRO_POKEDEX(
 Pokemon_ID Int PRIMARY KEY,
-Treinador_ID Int NOT NULL,
+Treinador_ID Int NOT NULL DEFAULT 1,
 Pokemon_Data_Captura Date,
 Pokemon_Hp INT,
 Pokemon_Atk INT,
@@ -118,8 +118,9 @@ Hora_Captura Time
 );
 
 --Tabela usada como arquivo log
-CREATE TABLE ADMIN_LOG(
-data date,
-usuario varchar(15),
-modificacao varchar(6)
+CREATE TABLE ADMIN_LOG (
+    Id SERIAL PRIMARY KEY,
+    Operacao text,
+    Nome_tabela text,
+    Data_Captura TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
