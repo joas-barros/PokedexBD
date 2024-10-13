@@ -28,11 +28,15 @@ END;
 $kgParaLbs$
 LANGUAGE 'plpgsql';
 
---Ao inserir Pokemons na tabela registro_pokedex, insere automaticamente no arquivo de pokemons capturados
+--Ao inserir Pokemons na tabela registro_pokedex, insere automaticamente no arquivo de log
 CREATE OR REPLACE RULE R1 AS
 ON INSERT TO Registro_Pokedex
-DO INSERT INTO CAPTURADOS_LOG VALUES
+DO INSERT INTO Capturados_Log VALUES
 (retornaNomeTreinador(New.Treinador_Id), retornaNomePokemon(New.Pokemon_Id), now(), now());
+
+CREATE OR REPLACE RULE R2 AS
+ON INSERT TO Registro_Pokedex
+DO UPDATE Pokedex SET Pokedex_Capturado = TRUE WHERE Pokedex_Num = New.Pokemon_ID;
 
 --Função para popular tabela de log
 CREATE OR REPLACE FUNCTION FUNC_LOG()
@@ -96,7 +100,7 @@ DECLARE
 Val_Min Int;
 Val_Max Int;
 BEGIN
-SELECT HP_Min, HP_Max INTO Val_Min, Val_Max FROM Pokemon WHERE Pokemon_ID = Num;
+SELECT Pokemon_HP_Min, Pokemon_HP_Max INTO Val_Min, Val_Max FROM Pokemon WHERE Pokemon_ID = Num;
 RETURN (RANDOM() * (Val_Max - Val_Min)) + Val_Min;
 END;
 $$ LANGUAGE 'plpgsql';
@@ -108,7 +112,7 @@ DECLARE
 Val_Min Int;
 Val_Max Int;
 BEGIN
-SELECT Atk_Min, Atk_Max INTO Val_Min, Val_Max FROM Pokemon WHERE Pokemon_ID = Num;
+SELECT Pokemon_Atk_Min, Pokemon_Atk_Max INTO Val_Min, Val_Max FROM Pokemon WHERE Pokemon_ID = Num;
 RETURN (RANDOM() * (Val_Max - Val_Min)) + Val_Min;
 END;
 $$ LANGUAGE 'plpgsql';
@@ -120,7 +124,7 @@ DECLARE
 Val_Min Int;
 Val_Max Int;
 BEGIN
-SELECT Def_Min, Def_Max INTO Val_Min, Val_Max FROM Pokemon WHERE Pokemon_ID = Num;
+SELECT Pokemon_Def_Min, Pokemon_Def_Max INTO Val_Min, Val_Max FROM Pokemon WHERE Pokemon_ID = Num;
 RETURN (RANDOM() * (Val_Max - Val_Min)) + Val_Min;
 END;
 $$ LANGUAGE 'plpgsql';
@@ -132,7 +136,7 @@ DECLARE
 Val_Min Int;
 Val_Max Int;
 BEGIN
-SELECT SP_Atk_Min, SP_Atk_Max INTO Val_Min, Val_Max FROM Pokemon WHERE Pokemon_ID = Num;
+SELECT Pokemon_SP_Atk_Min, Pokemon_SP_Atk_Max INTO Val_Min, Val_Max FROM Pokemon WHERE Pokemon_ID = Num;
 RETURN (RANDOM() * (Val_Max - Val_Min)) + Val_Min;
 END;
 $$ LANGUAGE 'plpgsql';
@@ -144,7 +148,7 @@ DECLARE
 Val_Min Int;
 Val_Max Int;
 BEGIN
-SELECT SP_Def_Min, SP_Def_Max INTO Val_Min, Val_Max FROM Pokemon WHERE Pokemon_ID = Num;
+SELECT Pokemon_SP_Def_Min, Pokemon_SP_Def_Max INTO Val_Min, Val_Max FROM Pokemon WHERE Pokemon_ID = Num;
 RETURN (RANDOM() * (Val_Max - Val_Min)) + Val_Min;
 END;
 $$ LANGUAGE 'plpgsql';
@@ -156,7 +160,7 @@ DECLARE
 Val_Min Int;
 Val_Max Int;
 BEGIN
-SELECT Velocidade_Min, Velocidade_Max INTO Val_Min, Val_Max FROM Pokemon WHERE Pokemon_ID = Num;
+SELECT Pokemon_Velocidade_Min, Pokemon_Velocidade_Max INTO Val_Min, Val_Max FROM Pokemon WHERE Pokemon_ID = Num;
 RETURN (RANDOM() * (Val_Max - Val_Min)) + Val_Min;
 END;
 $$ LANGUAGE 'plpgsql';
@@ -168,7 +172,7 @@ DECLARE
 Val_Min Int;
 Val_Max Int;
 BEGIN
-SELECT Level_Min, Level_Max INTO Val_Min, Val_Max FROM Pokemon WHERE Pokemon_ID = Num;
+SELECT Pokemon_Level_Min, Pokemon_Level_Max INTO Val_Min, Val_Max FROM Pokemon WHERE Pokemon_ID = Num;
 RETURN (RANDOM() * (Val_Max - Val_Min)) + Val_Min;
 END;
 $$ LANGUAGE 'plpgsql';
@@ -177,10 +181,6 @@ $$ LANGUAGE 'plpgsql';
 CREATE OR REPLACE FUNCTION PREENCHER_REGISTRO_POKEDEX()
 RETURNS TRIGGER AS $$
 BEGIN
-    -- Verifica se o Pokémon existe
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Pokemon com ID % não encontrado', NEW.Pokemon_ID;
-    END IF;
 
     -- Preenche os campos na nova linha
     NEW.Pokemon_Data_Captura := CURRENT_DATE;
@@ -194,9 +194,26 @@ BEGIN
 
     RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE 'plpgsql';
 
 --TRIGGER PARA PREENCHER A TABELA REGISTRO_POKEDEX
 CREATE TRIGGER TRIGGER_REGISTRO_POKEDEX
 BEFORE INSERT ON REGISTRO_POKEDEX
 FOR EACH ROW EXECUTE FUNCTION PREENCHER_REGISTRO_POKEDEX();
+
+--Criando VIEW Para Ver os Pokemons Instanciados
+CREATE VIEW Capturados AS 
+(SELECT A.Pokemon_ID AS Numero,
+E.Pokemon_Nome AS Nome,
+E.Pokemon_Habilidade_1 AS Habilidade,
+A.Pokemon_Hp AS HP, A.Pokemon_Atk AS Ataque, 
+A.Pokemon_Def AS Defesa, A.Pokemon_Sp_Atk AS SP_Ataque,
+A.Pokemon_Sp_Def AS SP_Defesa, A.Pokemon_Velocidade AS VELOCIDADE,
+A.Pokemon_Level AS Nivel, 
+E.Pokemon_Sexo AS Sexo, E.Pokemon_Altura AS Altura, 
+E.Pokemon_Peso AS Peso_em_KG,
+KGPARALBS(E.Pokemon_Peso) AS Peso_em_Libras,
+A.Pokemon_Data_Captura AS Data_Captura
+FROM Registro_Pokedex AS A, Pokemon AS E
+WHERE A.Pokemon_ID = E.Pokemon_ID
+)
