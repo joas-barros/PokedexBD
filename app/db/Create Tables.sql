@@ -55,6 +55,8 @@ CONSTRAINT CHECK_GERACAO CHECK (Pokedex_Geracao > 0 AND Pokedex_Geracao < 10)
 insert into POKEDEX (Pokedex_Nome, Pokedex_Tipo_1, Pokedex_Tipo_2, Pokedex_Taxa_Captura, Pokedex_Geracao, Pokedex_Info) 
 	values ('pokedex', 3, 2, 0.6, 1, 'info'); 
 
+select * from pokedex;
+
 select * from pokedex INNER JOIN tipo as t1 ON pokedex.Pokedex_Tipo_1 = t1.Tipo_ID INNER JOIN tipo as t2 ON pokedex.Pokedex_Tipo_2 = t2.Tipo_ID;
 
 CREATE TABLE EVOLUCAO(
@@ -176,13 +178,14 @@ select
         inner join habilidade h3 on p.Pokemon_Habilidade_3 = h3.habilidade_id 
         inner join habilidade h4 on p.Pokemon_Habilidade_4 = h4.habilidade_id;
 	
-
-drop table POKEMON;
+select * from pokemon;
 
 CREATE TABLE TREINADOR(
 Treinador_ID Serial PRIMARY KEY,
 Treinador_Nome Text NOT NULL
 );
+
+select * from treinador;
 
 CREATE TABLE REGISTRO_POKEDEX(
 Pokemon_ID Int PRIMARY KEY,
@@ -199,7 +202,13 @@ CONSTRAINT FK_POKEMON_ID FOREIGN KEY(Pokemon_ID) REFERENCES POKEDEX(POKEDEX_NUM)
 CONSTRAINT FK_TREINADOR_ID FOREIGN KEY(Treinador_ID) REFERENCES TREINADOR(TREINADOR_ID) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
-drop table REGISTRO_POKEDEX;
+insert into REGISTRO_POKEDEX (Pokemon_ID, Treinador_ID) values (1, 1);
+
+select * from REGISTRO_POKEDEX;
+
+select * from REGISTRO_POKEDEX 
+	INNER JOIN pokedex ON registro_pokedex.pokemon_id = pokedex.pokedex_num 
+	INNER JOIN treinador ON registro_pokedex.treinador_id = treinador.treinador_id;
 
 --Tabela para arquivo de log e arquivo PDF
 CREATE TABLE CAPTURADOS(
@@ -207,4 +216,12 @@ Treinador_Nome Text,
 Pokemon_Nome Text,
 Data_Captura Date,
 Hora_Captura Time
+);
+
+--Tabela usada como arquivo log
+CREATE TABLE ADMIN_LOG (
+    Id SERIAL PRIMARY KEY,
+    Operacao text,
+    Nome_tabela text,
+    Data_Captura TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

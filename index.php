@@ -7,6 +7,7 @@ require_once 'app/controllers/resources/HabilidadeResource.php';
 require_once 'app/controllers/resources/PokedexResource.php';
 require_once 'app/controllers/resources/PokemonResource.php';
 require_once 'app/controllers/resources/TreinadorResource.php';
+require_once 'app/controllers/resources/RegistroPokedexResource.php';
 // criando os endpoints
 
 // Obter a URL requisitada
@@ -49,7 +50,7 @@ $id = $_GET['id'] ?? null;
 // }
 
 // Instanciar o controller
-$controller = new TreinadorResource();
+$controller = new RegistroPokedexResource();
 $controller->handleRequest($method, $id);
 
 

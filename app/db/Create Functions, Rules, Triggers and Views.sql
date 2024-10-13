@@ -33,3 +33,166 @@ CREATE OR REPLACE RULE R1 AS
 ON INSERT TO Registro_Pokedex
 DO INSERT INTO Capturados VALUES
 (retornaNomeTreinador(New.Treinador_Id), retornaNomePokemon(New.Pokemon_Id), now(), now());
+
+--Função para popular tabela de log
+CREATE OR REPLACE FUNCTION FUNC_LOG()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        INSERT INTO admin_log (operacao, nome_tabela)
+        VALUES ('INSERT', TG_TABLE_NAME);
+        RETURN NEW;
+    ELSIF TG_OP = 'UPDATE' THEN
+        INSERT INTO admin_log (operacao, nome_tabela)
+        VALUES ('UPDATE', TG_TABLE_NAME);
+        RETURN NEW;
+    ELSIF TG_OP = 'DELETE' THEN
+        INSERT INTO admin_log (operacao, nome_tabela)
+        VALUES ('DELETE', TG_TABLE_NAME);
+        RETURN OLD;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+--Trigger para tabela EFEITO
+CREATE TRIGGER log_efeito
+AFTER INSERT OR UPDATE OR DELETE ON efeito
+FOR EACH ROW EXECUTE FUNCTION func_log();
+
+--TRIGGER PARA TABELA TIPO
+CREATE TRIGGER log_tipo
+AFTER INSERT OR UPDATE OR DELETE ON tipo
+FOR EACH ROW EXECUTE FUNCTION func_log();
+
+--TRIGGER PARA TABELA EVOLUCAO
+CREATE TRIGGER log_evolucao
+AFTER INSERT OR UPDATE OR DELETE ON evolucao
+FOR EACH ROW EXECUTE FUNCTION func_log();
+
+--TRIGGER PARA TABELA FRAQUEZAS
+CREATE TRIGGER log_fraquezas
+AFTER INSERT OR UPDATE OR DELETE ON fraquezas
+FOR EACH ROW EXECUTE FUNCTION func_log();
+
+--TRIGGER PARA TABELA HABILIDADE
+CREATE TRIGGER log_habilidade
+AFTER INSERT OR UPDATE OR DELETE ON habilidade
+FOR EACH ROW EXECUTE FUNCTION func_log();
+
+--TRIGGER PARA TABELA POKEDEX
+CREATE TRIGGER log_pokedex
+AFTER INSERT OR UPDATE OR DELETE ON pokedex
+FOR EACH ROW EXECUTE FUNCTION func_log();
+
+--TRIGGER PARA TABELA POKEMON
+CREATE TRIGGER log_pokedmon
+AFTER INSERT OR UPDATE OR DELETE ON pokemon
+FOR EACH ROW EXECUTE FUNCTION func_log();
+
+--FUNÇÃO PARA SORTEAR HP RANDOM
+CREATE OR REPLACE FUNCTION gerar_HP (Num Int)
+RETURNS Int AS $$
+DECLARE 
+Val_Min Int;
+Val_Max Int;
+BEGIN
+SELECT Pokemon_HP_Min, Pokemon_HP_Max INTO Val_Min, Val_Max FROM Pokemon WHERE Pokemon_ID = Num;
+RETURN (RANDOM() * (Val_Max - Val_Min)) + Val_Min;
+END;
+$$ LANGUAGE 'plpgsql';
+
+--FUNÇÃO PARA SORTEAR ATAQUE RANDOM
+CREATE OR REPLACE FUNCTION gerar_Ataque (Num Int)
+RETURNS Int AS $$
+DECLARE 
+Val_Min Int;
+Val_Max Int;
+BEGIN
+SELECT Pokemon_Atk_Min, Pokemon_Atk_Max INTO Val_Min, Val_Max FROM Pokemon WHERE Pokemon_ID = Num;
+RETURN (RANDOM() * (Val_Max - Val_Min)) + Val_Min;
+END;
+$$ LANGUAGE 'plpgsql';
+
+--FUNÇÃO PARA SORTEAR DEFESA RANDOM
+CREATE OR REPLACE FUNCTION gerar_Defesa (Num Int)
+RETURNS Int AS $$
+DECLARE 
+Val_Min Int;
+Val_Max Int;
+BEGIN
+SELECT Pokemon_Def_Min, Pokemon_Def_Max INTO Val_Min, Val_Max FROM Pokemon WHERE Pokemon_ID = Num;
+RETURN (RANDOM() * (Val_Max - Val_Min)) + Val_Min;
+END;
+$$ LANGUAGE 'plpgsql';
+
+--FUNÇÃO PARA SORTEAR SP_ATK RANDOM
+CREATE OR REPLACE FUNCTION gerar_Sp_Atk (Num Int)
+RETURNS Int AS $$
+DECLARE 
+Val_Min Int;
+Val_Max Int;
+BEGIN
+SELECT Pokemon_SP_Atk_Min, Pokemon_SP_Atk_Max INTO Val_Min, Val_Max FROM Pokemon WHERE Pokemon_ID = Num;
+RETURN (RANDOM() * (Val_Max - Val_Min)) + Val_Min;
+END;
+$$ LANGUAGE 'plpgsql';
+
+--FUNÇÃO PARA SORTEAR SP_Def RANDOM
+CREATE OR REPLACE FUNCTION gerar_Sp_Def (Num Int)
+RETURNS Int AS $$
+DECLARE 
+Val_Min Int;
+Val_Max Int;
+BEGIN
+SELECT Pokemon_SP_Def_Min, Pokemon_SP_Def_Max INTO Val_Min, Val_Max FROM Pokemon WHERE Pokemon_ID = Num;
+RETURN (RANDOM() * (Val_Max - Val_Min)) + Val_Min;
+END;
+$$ LANGUAGE 'plpgsql';
+
+--FUNÇÃO PARA SORTEAR Velocidade RANDOM
+CREATE OR REPLACE FUNCTION gerar_Velocidade (Num Int)
+RETURNS Int AS $$
+DECLARE 
+Val_Min Int;
+Val_Max Int;
+BEGIN
+SELECT Pokemon_Velocidade_Min, Pokemon_Velocidade_Max INTO Val_Min, Val_Max FROM Pokemon WHERE Pokemon_ID = Num;
+RETURN (RANDOM() * (Val_Max - Val_Min)) + Val_Min;
+END;
+$$ LANGUAGE 'plpgsql';
+
+--FUNÇÃO PARA SORTEAR Level RANDOM
+CREATE OR REPLACE FUNCTION gerar_Level (Num Int)
+RETURNS Int AS $$
+DECLARE 
+Val_Min Int;
+Val_Max Int;
+BEGIN
+SELECT Pokemon_Level_Min, Pokemon_Level_Max INTO Val_Min, Val_Max FROM Pokemon WHERE Pokemon_ID = Num;
+RETURN (RANDOM() * (Val_Max - Val_Min)) + Val_Min;
+END;
+$$ LANGUAGE 'plpgsql';
+
+--FUNÇÃO DO GATILHO PARA PREENCHER A TABELA REGISTRO_POKEDEX
+CREATE OR REPLACE FUNCTION PREENCHER_REGISTRO_POKEDEX()
+RETURNS TRIGGER AS $$
+BEGIN
+
+    -- Preenche os campos na nova linha
+    NEW.Pokemon_Data_Captura := CURRENT_DATE;
+    NEW.Pokemon_Hp := gerar_hp(NEW.Pokemon_ID);
+    NEW.Pokemon_Atk := gerar_ataque(NEW.Pokemon_ID);
+    NEW.Pokemon_Def := gerar_defesa(NEW.Pokemon_ID);
+    NEW.Pokemon_SP_Atk := gerar_sp_atk(NEW.Pokemon_ID);
+    NEW.Pokemon_SP_Def := gerar_sp_def(NEW.Pokemon_ID);
+    NEW.Pokemon_Velocidade := gerar_velocidade(NEW.Pokemon_ID);
+    NEW.Pokemon_Level := gerar_level(NEW.Pokemon_ID);
+
+    RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+--TRIGGER PARA PREENCHER A TABELA REGISTRO_POKEDEX
+CREATE TRIGGER TRIGGER_REGISTRO_POKEDEX
+BEFORE INSERT ON REGISTRO_POKEDEX
+FOR EACH ROW EXECUTE FUNCTION PREENCHER_REGISTRO_POKEDEX();
