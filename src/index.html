@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PokedexBD</title>
+    <link rel="stylesheet" href="output.css">
+    <link rel="icon" href="img/pb-icon.svg">
+</head>
+<body class="bg-full-bg bg-center ">
+    <div class="w-screen h-screen flex flex-col justify-center items-center mt-[-30px]">
+        <a class="w-64 mb-5">
+            <img src="img/pokemon.svg">
+        </a>
+        <div class="w-10/12 backdrop-blur-sm bg-white/75 grid rounded-2xl shadow-2xl md:mt-0 sm:max-w-md xl:p-0">
+
+            <div class="p-6 grid space-y-4 md:space-y-6 sm:p-8">
+                <h1 class="font-sans text-xl justify-self-center leading-tight font-regular tracking-tight text-gray-500 md:text-2xl">
+                    Entre em sua conta
+                </h1>
+                <div class="w-full h-[1px] my-3 lg:mb-10" style="background-image: linear-gradient(90deg, rgba(149, 131, 198, 0) 1.46%, rgba(149, 131, 198, 0.6) 40.83%, rgba(149, 131, 198, 0.3) 65.57%, rgba(149, 131, 198, 0) 107.92%);"></div>
+                <form class="flex flex-col grid space-y-4 md:space-y-6" autocomplete="off" action="dashboard.html" method="POST">
+                    <div>
+                        <label for="email" class="block mb-2  mx-2 text-sm font-medium text-gray-500">Email</label>
+                        <input type="email" name="email" id="email" class="bg-gray-50 border-2 border-gray-400 text-gray-900 rounded-full focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="email@companhia.com" required="">
+                    </div>
+                    <div>
+                        <div class="mb-0 relative">
+                            <label for="password" class="block mb-2 mx-2 text-sm font-medium text-gray-500">Confirmar senha</label>
+                            <div class="flex items-center">
+                                <input type="password" id="password" placeholder="••••••••" required name="password" class="bg-gray-50 border-2 border-gray-400 text-gray-900 rounded-full focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
+                                <button type="button" id="togglePassword"
+                                        class="focus:outline-none -ml-8">
+                                    <img src="https://media.geeksforgeeks.org/wp-content/uploads/20240227164304/visible.png" alt="" class="w-4 hover:scale-125">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-start">
+                            <div class="flex items-center h-5">
+                                <input id="remember" aria-describedby="remember" type="checkbox" class="w-4 h-4 border border-gray-300 rounded">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="remember" class="text-gray-500">Lembre de mim</label>
+                            </div>
+                        </div>
+                        <a href="#" class="text-sm font-medium text-slate-500 hover:underline">Esqueceu sua senha?</a>
+                    </div>
+
+                    <button type="submit" class="group w-32 relative items-center flex flex-row transition-all ease-in-out justify-self-center text-white hover:duration-500 border-2 border-gray-300 hover:border-gray-950 bg-gradient-to-tl from-gray-500 to-gray-700 hover:from-rose-400 hover:to-red-500 focus:ring-4 focus:outline-none font-medium rounded-3xl text-sm px-2 py-2.5 text-center">
+                        <img src="img/pb-white.svg" class="absolute w-6 group-hover:rotate-180 group-hover:scale-125 duration-300">
+                        <span class="flex-1 text-center">Login</span>
+                    </button>
+                </form>
+                <div class="w-full h-[1px] my-3 lg:mb-10" style="background-image: linear-gradient(90deg, rgba(149, 131, 198, 0) 1.46%, rgba(149, 131, 198, 0.6) 40.83%, rgba(149, 131, 198, 0.3) 65.57%, rgba(149, 131, 198, 0) 107.92%);"></div>
+                <p class="text-sm font-regular text-gray-600 justify-self-center">
+                    Ainda não tem uma conta? <a href="register.html" class="font-medium text-primary-600 hover:underline">Crie agora!</a>
+                </p>
+            </div>
+        </div>
+        <footer class="shadow absolute inset-x-0 bottom-0 text-center p-3 bg-gradient-to-t from-slate-950 to-transparent text-white opacity-75">
+            © Ciência da Computação - UFERSA 2024.1 | PokedexBD | Todos os direitos reservados.</footer>
+    </div>
+    <script src="toggle.js"></script>
+</body>
+
+
+</html>

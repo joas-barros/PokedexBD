@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+    <link rel="stylesheet" href="output.css">
+    <link rel="stylesheet" href="input.css">
+    <link rel="icon" href="img/pb-icon.svg">
+
+</head>
+<body class="flex flex-col min-h-screen w-screen bg-white">
+        <header class="w-full h-14 flex flex-row items-center justify-between px-10 py-3 border-b border-gray-300">
+            <a href="dashboard.html" class="group">
+                <img src="img/pokemon.svg" class="w-24 group-hover:scale-110 transition-all ease-in-out">
+            </a>
+
+            <div class="w-auto flex gap-10 items-center">
+                <a href="#" class="hover:text-white font-medium transition-all ease-in-out border-2 border-red-500 hover:bg-red-500 rounded-full py-1 px-3 bg-gradient-to-tl from-transparent to-transparent hover:from-rose-400 hover:to-red-500 hover:scale-110">Minha Pokedex</a>
+                <a href="#" class="hover:text-red-500 transition-all ease-in-out hover:scale-110">Pokedex Completa</a>
+                <a href="#" class="hover:text-red-500 transition-all ease-in-out hover:scale-110">Sobre nós</a>
+                <a href="index.html" class="hover:text-red-500 transition-all ease-in-out hover:scale-110">Sair</a>
+
+            </div>
+        </header>
+        <main class="flex-grow relative">
+            <section class="w-full flex flex-row px-10 pt-10 gap-10 relative justify-center items-center">
+                <div class="relative font-[sans-serif] w-max">
+                    <button type="button" id="dropdownToggle"
+                            class="rounded-full px-5 py-3 border-2 border-gray-300 text-gray-500 text-sm outline-none bg-white hover:bg-gray-50">
+                        Geração
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 fill-gray-400 inline ml-3" viewBox="0 0 24 24">
+                            <path fill-rule="evenodd"
+                                  d="M11.99997 18.1669a2.38 2.38 0 0 1-1.68266-.69733l-9.52-9.52a2.38 2.38 0 1 1 3.36532-3.36532l7.83734 7.83734 7.83734-7.83734a2.38 2.38 0 1 1 3.36532 3.36532l-9.52 9.52a2.38 2.38 0 0 1-1.68266.69734z"
+                                  clip-rule="evenodd" data-original="#000000" />
+                        </svg>
+                    </button>
+
+                    <ul id="dropdownMenu" class=' text-center rounded-b-2xl absolute hidden shadow-2xl bg-white py-2 z-[1000] min-w-full w-max divide-y max-h-96 overflow-auto'>
+                        <li class='py-3 px-5 hover:bg-gray-50 text-gray-800 text-sm cursor-pointer'>Gen 1</li>
+                        <li class='py-3 px-5 hover:bg-gray-50 text-gray-800 text-sm cursor-pointer'>Gen 2</li>
+                        <li class='py-3 px-5 hover:bg-gray-50 text-gray-800 text-sm cursor-pointer'>Gen 3</li>
+                    </ul>
+                </div>
+
+                <div class="flex rounded-full w-[50%] border-2 border-gray-300 overflow-hidden max-w-md font-[sans-serif]">
+                    <input type="email" placeholder="Procurar pokemon..."
+                           class="w-full outline-none bg-white text-gray-600 text-sm px-4 py-3" />
+                    <button type='button' class="flex items-center justify-center bg-gray-400 px-5">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192.904 192.904" width="16px" class="fill-white">
+                            <path
+                                    d="m190.707 180.101-47.078-47.077c11.702-14.072 18.752-32.142 18.752-51.831C162.381 36.423 125.959 0 81.191 0 36.422 0 0 36.423 0 81.193c0 44.767 36.422 81.187 81.191 81.187 19.688 0 37.759-7.049 51.831-18.751l47.079 47.078a7.474 7.474 0 0 0 5.303 2.197 7.498 7.498 0 0 0 5.303-12.803zM15 81.193C15 44.694 44.693 15 81.191 15c36.497 0 66.189 29.694 66.189 66.193 0 36.496-29.692 66.187-66.189 66.187C44.693 147.38 15 117.689 15 81.193z">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Cards Pokemon -->
+
+            <div class="w-full p-10 z-10 flex flex-wrap gap-10 justify-around">
+                <div onclick="showModal()" class="flex-1 justify-around min-w-80 group px-5 py-6 bg-gradient-to-tr to-lime-300/35 from-emerald-400 text-white hover:scale-105 transition-all ease-in-out rounded-2xl flex flex-row items-center relative overflow-hidden hover:cursor-pointer hover:shadow-2xl">
+                    <section class="flex flex-col mr-5 z-10 flex-start">
+                        <h1 class="text-left text-2xl font-bold py-0.5 px-6 border-4 border-white rounded-full opacity-85">#001</h1>
+                        <h1 class="text-center text-xl font-bold my-3">Bulbasaur</h1>
+                        <div class="flex flex-col gap-2">
+                            <p class="py-0.5 px-6 bg-gradient-to-r from-lime-400 to-lime-500 backdrop-blur-sm w-auto rounded-full text-center shadow-md">Plant</p>
+                            <p class="py-0.5 px-6 bg-gradient-to-r from-fuchsia-600 w-auto to-purple-600 rounded-full text-center shadow-md">Poison</p>
+                        </div>
+                    </section>
+                    <img src="img/png/001.png" class="relative w-36 z-10 self-end">
+                    <img src="img/pb-white.svg" class="absolute w-60 z-0 -right-20 -bottom-20 opacity-50 group-hover:rotate-180 group-hover:scale-110 duration-300">
+                </div>
+
+                <div class="flex-1 justify-around min-w-80 group px-5 py-6 z-10 bg-gradient-to-tr to-lime-300/35 from-emerald-400 text-white hover:scale-105 transition-all ease-in-out rounded-2xl flex flex-row relative overflow-hidden hover:cursor-pointer hover:shadow-2xl">
+                    <section class="flex flex-col mr-5 z-10 flex-start">
+                        <h1 class="text-left text-2xl font-bold py-0.5 px-6 border-4 border-white rounded-full opacity-85">#002</h1>
+                        <h1 class="text-center text-xl font-bold my-3">Ivysaur</h1>
+                        <div class="flex flex-col gap-2">
+                            <p class="py-0.5 px-6 bg-gradient-to-r from-lime-400 to-lime-500 backdrop-blur-sm w-auto rounded-full text-center shadow-md">Plant</p>
+                            <p class="py-0.5 px-6 bg-gradient-to-r from-fuchsia-600 w-auto to-purple-600 rounded-full text-center shadow-md">Poison</p>
+                        </div>
+
+                    </section>
+                    <img src="img/png/002.png" class="w-36 z-10 self-end">
+                    <img src="img/pb-white.svg" class="absolute w-60 z-0 -right-20 -bottom-20 opacity-50 group-hover:rotate-180 group-hover:scale-110 duration-300">
+                </div>
+
+                <div class="flex-1 justify-around min-w-80 group px-5 py-6 z-10 bg-gradient-to-tr to-lime-300/35 from-emerald-400 text-white hover:scale-105 transition-all ease-in-out rounded-2xl flex flex-row relative overflow-hidden hover:cursor-pointer hover:shadow-2xl">
+                    <section class="flex flex-col mr-5 z-10 flex-start">
+                        <h1 class="text-left text-2xl font-bold py-0.5 px-6 border-4 border-white rounded-full opacity-85">#003</h1>
+                        <h1 class="text-center text-xl font-bold my-3">Venusaur</h1>
+                        <div class="flex flex-col gap-2">
+                            <p class="py-0.5 px-6 bg-gradient-to-r from-lime-400 to-lime-500 backdrop-blur-sm w-auto rounded-full text-center shadow-md">Plant</p>
+                            <p class="py-0.5 px-6 bg-gradient-to-r from-fuchsia-600 w-auto to-purple-600 rounded-full text-center shadow-md">Poison</p>
+                        </div>
+
+                    </section>
+                    <img src="img/png/003.png" class="w-36 z-10 self-end">
+                    <img src="img/pb-white.svg" class="absolute w-60 z-0 -right-20 -bottom-20 opacity-50 group-hover:rotate-180 group-hover:scale-110 duration-300">
+                </div>
+
+                <div class="flex-1 justify-around min-w-80 group px-5 py-6 z-10 bg-gradient-to-tr to-gray-300/35 from-gray-500 text-white hover:scale-105 transition-all ease-in-out rounded-2xl flex flex-row relative overflow-hidden hover:cursor-pointer hover:shadow-2xl">
+                    <section class="flex flex-col mr-5 z-10 flex-start">
+                        <h1 class="text-left text-2xl font-bold py-0.5 px-6 border-4 border-white rounded-full opacity-85">#004</h1>
+                        <h1 class="text-center text-xl font-bold my-3">????????</h1>
+                        <div class="flex flex-col gap-2">
+                            <p class="py-0.5 px-6 bg-gradient-to-r from-gray-500 to-gray-700 backdrop-blur-sm w-auto rounded-full text-center shadow-md">???</p>
+                        </div>
+                    </section>
+                    <img src="img/png/005-black.png" class="w-32   z-10 self-end">
+                    <img src="img/pb-white.svg" class="absolute w-60 z-0 -right-20 -bottom-20 opacity-50 group-hover:rotate-180 group-hover:scale-110 duration-300">
+                </div>
+            </div>
+<!--Modal-->
+            <!-- Modal Background Blur -->
+            <div id="blurBackground" class="blur-background"></div>
+
+            <!-- Modal -->
+
+
+            <div id="modal" class="fixed inset-0 flex items-center justify-center hidden z-20 transition-opacity duration-300 ease-in-out opacity-0">
+                <div class="bg-white p-8 rounded-lg shadow-lg max-w-sm w-full transition-opacity duration-300 ease-in-out opacity-0" id="modalContent">
+                    <div class="py-1 flex flex-col items-center">
+                        <h1>Bulbasaur - #001</h1>
+                        <button onclick="hideModal()" type="submit" class="group w-32 relative items-center flex flex-row transition-all ease-in-out justify-self-center text-white hover:duration-300 border-2 border-gray-300 hover:border-gray-950 bg-gradient-to-tl from-gray-500 to-gray-700 hover:from-rose-400 hover:to-red-500 focus:ring-4 focus:outline-none font-medium rounded-3xl text-sm px-2 py-2.5 text-center">
+                            <img src="img/pb-white.svg" class="absolute w-6 group-hover:rotate-180 group-hover:scale-125 duration-300">
+                            <span class="flex-1 text-center">Fechar</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+<!--        <img src="img/pb-black.svg" class="absolute w-[25%] z-0 opacity-15 duration-300 -right-20 -bottom-20 animate-slow-spin">-->
+    <footer class="flex flex-row justify-center bg-white text-center p-3 border-t border-gray-400 text-slate-650">
+        © Ciência da Computação - UFERSA 2024.1 | <p class="text-red-600 mx-2"> PokedexBD </p> | Todos os direitos reservados.
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>

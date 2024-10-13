@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.blur-background {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(128, 128, 128, 0.5); /* Adjust the color and opacity */
+    z-index: 10; /* Ensure this is below the modal but above main content */
+    display: none; /* Hidden by default */
+}
