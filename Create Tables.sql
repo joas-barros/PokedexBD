@@ -1,7 +1,6 @@
 CREATE TABLE TIPO(
 Tipo_ID Int PRIMARY KEY,
 Tipo_Nome Text,
-Cor Text NOT NULL
 );
 
 CREATE TABLE FRAQUEZAS(
@@ -132,4 +131,3 @@ CREATE TABLE ADMIN_LOG (
     Nome_tabela text,
     Data_Captura TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
