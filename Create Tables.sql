@@ -1,7 +1,6 @@
 CREATE TABLE TIPO(
 Tipo_ID Int PRIMARY KEY,
 Tipo_Nome Text,
-Tipo_Nome Text NOT NULL
 );
 
 CREATE TABLE FRAQUEZAS(
