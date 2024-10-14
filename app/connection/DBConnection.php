@@ -26,5 +26,9 @@ final class DBConnection {
     public function getConnection(){
         return $this->conn;
     }
+
+    public function closeConnection(){
+        $this->conn = null;
+    }
 }
 ?>
