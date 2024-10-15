@@ -220,7 +220,7 @@ select * from REGISTRO_POKEDEX
 	INNER JOIN treinador ON registro_pokedex.treinador_id = treinador.treinador_id;
 
 --Tabela para arquivo de log e arquivo PDF
-CREATE TABLE CAPTURADOS(
+CREATE TABLE CAPTURADOS_LOG(
 Treinador_Nome Text,
 Pokemon_Nome Text,
 Data_Captura Date,
@@ -234,3 +234,7 @@ CREATE TABLE ADMIN_LOG (
     Nome_tabela text,
     Data_Captura TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+select * from ADMIN_LOG;
+
+select * from treinador;
