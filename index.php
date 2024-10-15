@@ -54,10 +54,10 @@ $id = $_GET['id'] ?? null;
 // }
 
 // Instanciar o controller
- $controller = new CapturadosResource();
- $controller->handleRequest($method, $id);
+//  $controller = new CapturadosResource();
+//  $controller->handleRequest($method, $id);
 
-//PDF::generatePDF();
+PDF::generateCapturadosLogPDF();
 
 
 ?>

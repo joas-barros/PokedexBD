@@ -7,7 +7,7 @@ class PDF{
     private FPDF $pdf;
     private PDO $pdo;
 
-    public static function generatePDF(){
+    public static function generateAdmLogPDF(){
         $pdf = new FPDF('P', 'mm', 'A4');
         $pdo = DBConnection::getInstance()->getConnection();
 
@@ -34,6 +34,37 @@ class PDF{
             $pdf->Cell(50, 10, $row['operacao'], 1, 0, 'C');
             $pdf->Cell(50, 10, $row['nome_tabela'], 1, 0, 'C');
             $pdf->Cell(80, 10, $row['data_captura'], 1, 1, 'C');
+        }
+
+        $pdf->Output();
+    }
+
+    public static function generateCapturadosLogPDF(){
+        $pdf = new FPDF('P', 'mm', 'A4');
+        $pdo = DBConnection::getInstance()->getConnection();
+
+        $sql = "SELECT * FROM CAPTURADOS_LOG";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+
+        $pdf->AddPage();
+        $pdf->SetFont('Arial', 'B', 20);
+        
+        $pdf->Cell(190, 10, 'Captura Log', 0, 1, 'C');
+
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(30, 10, 'Treinador', 1, 0, 'C');
+        $pdf->Cell(50, 10, 'Pokemon', 1, 0, 'C');
+        $pdf->Cell(50, 10, 'Data de Captura', 1, 0, 'C');
+        $pdf->Cell(60, 10, 'Hora de Captura', 1, 1, 'C');
+
+        $pdf->SetFont('Arial', '', 12);
+        foreach($result as $row){
+            $pdf->Cell(30, 10, $row['treinador_nome'], 1, 0, 'C');
+            $pdf->Cell(50, 10, $row['pokemon_nome'], 1, 0, 'C');
+            $pdf->Cell(50, 10, $row['data_captura'], 1, 0, 'C');
+            $pdf->Cell(60, 10, $row['hora_captura'], 1, 1, 'C');
         }
 
         $pdf->Output();
