@@ -276,7 +276,7 @@ INSERT INTO Habilidade (Habilidade_ID, Habilidade_Tipo, Habilidade_Nome, Habilid
 (155, 9, 'Dig', 'O usuário se enterra no chão no primeiro turno e ataca no próximo turno.', NULL),
 (156, 9, 'Earthquake', 'O usuário desencadeia um terremoto que atinge todos os Pokémon ao seu redor.', NULL),
 (157, 9, 'Fissure', 'O usuário abre uma fissura no chão e deixa cair o alvo. O alvo desmaia instantaneamente se o ataque acertar.', NULL),
-(158, 9, 'Sand Attack', 'Sand is hurled in the target´s face, lowering the target´s accuracy.', NULL),
+(158, 9, 'Sand Attack', 'A areia é atirada na cara do alvo, diminuindo a precisão do alvo.', NULL),
 --Flying Exlusive
 
 
