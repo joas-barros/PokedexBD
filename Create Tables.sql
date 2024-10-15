@@ -1,6 +1,6 @@
 CREATE TABLE TIPO(
 Tipo_ID Int PRIMARY KEY,
-Tipo_Nome Text,
+Tipo_Nome Text
 );
 
 CREATE TABLE FRAQUEZAS(
@@ -91,7 +91,7 @@ CONSTRAINT FK_POKEMON_HABILIDADE_4 FOREIGN KEY (Pokemon_Habilidade_4) REFERENCES
 CONSTRAINT CHECK_LEVEL CHECK(Pokemon_Level_MIN > 0 AND Pokemon_Level_MAX <= 100),
 CONSTRAINT CHECK_STATS CHECK(Pokemon_HP_MIN > 0 AND Pokemon_HP_MAX > 0 AND Pokemon_ATK_MIN > 0 AND Pokemon_ATK_MAX > 0 AND Pokemon_DEF_MIN > 0 AND Pokemon_DEF_MAX > 0 
 AND Pokemon_SP_ATK_MIN > 0 AND Pokemon_SP_ATK_MAX > 0 AND Pokemon_SP_DEF_MIN > 0 AND Pokemon_SP_DEF_MAX > 0 AND Pokemon_VELOCIDADE_MIN > 0 AND Pokemon_VELOCIDADE_MAX > 0),
-CONSTRAINT CHECK_SEXO CHECK(Pokemon_Sexo = 'M' OR Pokemon_Sexo = 'F'),
+CONSTRAINT CHECK_SEXO CHECK(Pokemon_Sexo = 'M' OR Pokemon_Sexo = 'F' OR Pokemon_Sexo = 'U'),
 CONSTRAINT CHECK_ALTURA CHECK(Pokemon_Altura > 0),
 CONSTRAINT CHECK_PESO CHECK(Pokemon_Peso > 0)
 );
