@@ -97,8 +97,11 @@ CONSTRAINT CHECK_PESO CHECK(Pokemon_Peso > 0)
 );
 
 CREATE TABLE TREINADOR(
-Treinador_ID Int PRIMARY KEY,
+Treinador_ID Serial PRIMARY KEY,
 Treinador_Nome Text NOT NULL
+Treinador_Email Text NOT NULL,
+Treinador_Senha Text UNIQUE NOT NULL,
+Treinador_Data_Nascimento Date NOT NULL
 );
 
 CREATE TABLE REGISTRO_POKEDEX(
@@ -126,8 +129,8 @@ Hora_Captura Time
 
 --Tabela usada como arquivo log
 CREATE TABLE ADMIN_LOG (
-    Id SERIAL PRIMARY KEY,
-    Operacao text,
-    Nome_tabela text,
-    Data_Captura TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+Id SERIAL PRIMARY KEY,
+Operacao text,
+Nome_tabela text,
+Data_Captura TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
