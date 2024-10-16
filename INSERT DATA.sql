@@ -343,7 +343,7 @@ Pokemon_VELOCIDADE_MIN, Pokemon_VELOCIDADE_MAX, Pokemon_Sexo, Pokemon_Altura, Po
 INSERT INTO Treinador (Treinador_Nome, Treinador_Email, Treinador_Senha, Treinador_Data_Nascimento) VALUES
 ('Joás', 'Joas.email@email.com', '1234', ),
 ('Guilherme', 'guilherme.email@email.com', '5678', '28/09/1998'),
-('João', 'joao.email@email.com', '9101112', );
+('Victor', 'jvictor@email.com', 'Vic*963,*963,', );
 
 INSERT INTO Registro_Pokedex (Pokemon_ID, Treinador_ID) VALUES
 ()
