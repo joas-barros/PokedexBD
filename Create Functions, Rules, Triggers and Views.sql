@@ -202,18 +202,32 @@ BEFORE INSERT ON REGISTRO_POKEDEX
 FOR EACH ROW EXECUTE FUNCTION PREENCHER_REGISTRO_POKEDEX();
 
 --Criando VIEW Para Ver os Pokemons Instanciados
-CREATE VIEW Capturados AS 
-(SELECT A.Pokemon_ID AS Numero,
-E.Pokemon_Nome AS Nome,
-E.Pokemon_Habilidade_1 AS Habilidade,
-A.Pokemon_Hp AS HP, A.Pokemon_Atk AS Ataque, 
-A.Pokemon_Def AS Defesa, A.Pokemon_Sp_Atk AS SP_Ataque,
-A.Pokemon_Sp_Def AS SP_Defesa, A.Pokemon_Velocidade AS VELOCIDADE,
-A.Pokemon_Level AS Nivel, 
-E.Pokemon_Sexo AS Sexo, E.Pokemon_Altura AS Altura, 
-E.Pokemon_Peso AS Peso_em_KG,
-KGPARALBS(E.Pokemon_Peso) AS Peso_em_Libras,
-A.Pokemon_Data_Captura AS Data_Captura
-FROM Registro_Pokedex AS A, Pokemon AS E
-WHERE A.Pokemon_ID = E.Pokemon_ID
-)
+CREATE VIEW Capturados AS (
+    SELECT 
+        A.Pokemon_ID AS Numero,
+        E.Pokemon_Nome AS Nome,
+        E.Pokemon_Habilidade_1 AS Passiva1,
+        E.Pokemon_Habilidade_2 AS Passiva2,
+        E.Pokemon_Habilidade_3 AS Passiva3,
+        E.Pokemon_Habilidade_4 AS Passiva4,
+        A.Pokemon_Hp AS HP,
+        A.Pokemon_Atk AS Ataque,
+        A.Pokemon_Def AS Defesa,
+        A.Pokemon_Sp_Atk AS SP_Ataque,
+        A.Pokemon_Sp_Def AS SP_Defesa,
+        A.Pokemon_Velocidade AS VELOCIDADE,
+        A.Pokemon_Level AS Nivel,
+        E.Pokemon_Sexo AS Sexo,
+        E.Pokemon_Altura AS Altura,
+        E.Pokemon_Peso AS Peso_em_KG,
+        KGPARALBS(E.Pokemon_Peso) AS Peso_em_Libras,
+        A.Pokemon_Data_Captura AS Data_Captura
+    FROM 
+        Registro_Pokedex AS A 
+    JOIN 
+        Pokemon AS E
+    ON 
+        A.Pokemon_ID = E.Pokemon_ID
+    WHERE 
+        A.Pokemon_ID = E.Pokemon_ID
+);
