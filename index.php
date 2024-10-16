@@ -54,7 +54,7 @@ $id = $_GET['id'] ?? null;
 // }
 
 // Instanciar o controller
-  $controller = new PokemonResource();
+  $controller = new TipoResource();
   $controller->handleRequest($method, $id);
 
 //PDF::generateCapturadosLogPDF();

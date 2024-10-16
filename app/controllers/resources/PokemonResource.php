@@ -10,33 +10,37 @@ class PokemonResource{
     }
 
     public function handleRequest($method, $id = null){
-        switch($method){
-            case 'GET':
-                if($id){
-                    $this->pokemonService->findById($id);
-                } else {
-                    $this->pokemonService->findAll();
-                }
-                break;
-            case 'POST':
-                $this->pokemonService->save();
-                break;
-            case 'PUT':
-                if ($id){
-                    $this->pokemonService->update($id);
-                } else {
+        try {
+            switch($method){
+                case 'GET':
+                    if($id){
+                        $this->pokemonService->findById($id);
+                    } else {
+                        $this->pokemonService->findAll();
+                    }
+                    break;
+                case 'POST':
+                    $this->pokemonService->save();
+                    break;
+                case 'PUT':
+                    if ($id){
+                        $this->pokemonService->update($id);
+                    } else {
+                        $this->pokemonService->respondMethodNotAllowed();
+                    }
+                    break;
+                case 'DELETE':
+                    if ($id){
+                        $this->pokemonService->delete($id);
+                    } else {
+                        $this->pokemonService->respondMethodNotAllowed();
+                    }
+                    break;
+                default:
                     $this->pokemonService->respondMethodNotAllowed();
-                }
-                break;
-            case 'DELETE':
-                if ($id){
-                    $this->pokemonService->delete($id);
-                } else {
-                    $this->pokemonService->respondMethodNotAllowed();
-                }
-                break;
-            default:
-                $this->pokemonService->respondMethodNotAllowed();
+            }
+        } catch ( PDOException $e){
+            $this->pokemonService->respondInternalServerError($e);
         }
     }
 }

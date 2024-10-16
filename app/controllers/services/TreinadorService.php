@@ -2,7 +2,7 @@
 
 require_once 'app/model/repository/impl/TreinadorRepository.php';
 
-class TreinadorService {
+class TreinadorService extends AbstractService {
     private TreinadorRepository $treinadorRepository;
 
     public function __construct(){
@@ -110,12 +110,5 @@ class TreinadorService {
         }
     }
 
-    public function respondMethodNotAllowed() {
-        http_response_code(405);
-        echo json_encode([
-            "status" => "error",
-            "message" => "Método não permitido."
-        ]);
-    }
 }
 ?>

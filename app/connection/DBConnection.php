@@ -7,6 +7,7 @@ final class DBConnection {
     private $usuario = "postgres";
     private $senha = "002045";
     
+    
     private function __construct(){
         try{
             $this->conn = new PDO("pgsql:host=$this->endereco;dbname=$this->nomebd", $this->usuario, $this->senha);

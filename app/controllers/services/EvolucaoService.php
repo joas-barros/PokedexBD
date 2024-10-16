@@ -5,7 +5,7 @@ require_once 'app/model/repository/impl/PokedexRepository.php';
 
 require_once 'app/model/entities/Evolucao.php';
 
-class EvolucaoService {
+class EvolucaoService extends AbstractService {
 
     private EvolucaoRepository $evolucaoRepository;
     private PokedexRepository $pokedexRepository;
@@ -96,14 +96,6 @@ class EvolucaoService {
                 'message' => 'Parâmetros inválidos'
             ]);
         }
-    }
-
-    public function respondMethodNotAllowed() {
-        http_response_code(405);
-        echo json_encode([
-            "status" => "error",
-            "message" => "Método não permitido."
-        ]);
     }
 
 }

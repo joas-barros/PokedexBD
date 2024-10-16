@@ -8,7 +8,7 @@ require_once 'app/model/entities/Efeito.php';
 require_once 'app/model/repository/impl/TipoRepository.php';
 require_once 'app/model/repository/impl/EfeitoRepository.php';
 
-class HabilidadeService{
+class HabilidadeService extends AbstractService {
     private HabilidadeRepository $habilidadeRepository;
     private TipoRepository $tipoRepository;
     private EfeitoRepository $efeitoRepository;
@@ -123,14 +123,6 @@ class HabilidadeService{
                 'message' => 'Habilidade não encontrada'
             ]);
         }
-    }
-
-    public function respondMethodNotAllowed() {
-        http_response_code(405);
-        echo json_encode([
-            "status" => "error",
-            "message" => "Método não permitido."
-        ]);
     }
     
 }

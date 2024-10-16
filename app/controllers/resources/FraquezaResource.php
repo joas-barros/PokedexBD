@@ -10,33 +10,37 @@ class FraquezaResource {
     }
 
     public function handleRequest($method, $id){
-        switch ($method) {
-            case 'GET':
-                if($id){
-                    $this->fraquezaService->findById($id);
-                } else {
-                    $this->fraquezaService->findAll();
-                }
-                break;
-            case 'POST':
-                $this->fraquezaService->save();
-                break;
-            case 'PUT':
-                if ($id){
-                    $this->fraquezaService->update($id);
-                } else {
+        try {
+            switch ($method) {
+                case 'GET':
+                    if($id){
+                        $this->fraquezaService->findById($id);
+                    } else {
+                        $this->fraquezaService->findAll();
+                    }
+                    break;
+                case 'POST':
+                    $this->fraquezaService->save();
+                    break;
+                case 'PUT':
+                    if ($id){
+                        $this->fraquezaService->update($id);
+                    } else {
+                        $this->fraquezaService->respondMethodNotAllowed();
+                    }
+                    break;
+                case 'DELETE':
+                    if ($id){
+                        $this->fraquezaService->delete($id);
+                    } else {
+                        $this->fraquezaService->respondMethodNotAllowed();
+                    }
+                    break;
+                default:
                     $this->fraquezaService->respondMethodNotAllowed();
-                }
-                break;
-            case 'DELETE':
-                if ($id){
-                    $this->fraquezaService->delete($id);
-                } else {
-                    $this->fraquezaService->respondMethodNotAllowed();
-                }
-                break;
-            default:
-                $this->fraquezaService->respondMethodNotAllowed();
+            }
+        } catch (PDOException $e){
+            $this->fraquezaService->respondInternalServerError($e);
         }
     }
 }

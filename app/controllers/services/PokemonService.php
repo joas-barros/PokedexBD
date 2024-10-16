@@ -4,7 +4,7 @@ require_once 'app/model/repository/impl/PokemonRepository.php';
 require_once 'app/model/repository/impl/HabilidadeRepository.php';
 require_once 'app/model/repository/impl/PokedexRepository.php';
 
-class PokemonService {
+class PokemonService extends AbstractService {
 
     private PokemonRepository $pokemonRepository;
     private HabilidadeRepository $habilidadeRepository;
@@ -133,13 +133,6 @@ class PokemonService {
         }
     }
 
-    public function respondMethodNotAllowed() {
-        http_response_code(405);
-        echo json_encode([
-            "status" => "error",
-            "message" => "Método não permitido."
-        ]);
-    }
 }
 
 ?>

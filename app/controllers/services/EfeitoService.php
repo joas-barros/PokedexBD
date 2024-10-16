@@ -1,6 +1,6 @@
 <?php 
 
-class EfeitoService{
+class EfeitoService extends AbstractService {
     private EfeitoRepository $efeitoRepository;
 
     public function __construct(){
@@ -105,14 +105,6 @@ class EfeitoService{
                 'message' => 'Efeito não encontrado'
             ]);
         }
-    }
-
-    public function respondMethodNotAllowed() {
-        http_response_code(405);
-        echo json_encode([
-            "status" => "error",
-            "message" => "Método não permitido."
-        ]);
     }
 
 }

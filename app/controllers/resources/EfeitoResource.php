@@ -10,33 +10,37 @@ class EfeitoResource{
     }
 
     public function handleRequest($method, $id = null){
-        switch($method){
-            case 'GET':
-                if($id){
-                    $this->efeitoService->findById($id);
-                } else {
-                    $this->efeitoService->findAll();
-                }
-                break;
-            case 'POST':
-                $this->efeitoService->save();
-                break;
-            case 'PUT':
-                if ($id){
-                    $this->efeitoService->update($id);
-                } else {
+        try {
+            switch($method){
+                case 'GET':
+                    if($id){
+                        $this->efeitoService->findById($id);
+                    } else {
+                        $this->efeitoService->findAll();
+                    }
+                    break;
+                case 'POST':
+                    $this->efeitoService->save();
+                    break;
+                case 'PUT':
+                    if ($id){
+                        $this->efeitoService->update($id);
+                    } else {
+                        $this->efeitoService->respondMethodNotAllowed();
+                    }
+                    break;
+                case 'DELETE':
+                    if ($id){
+                        $this->efeitoService->delete($id);
+                    } else {
+                        $this->efeitoService->respondMethodNotAllowed();
+                    }
+                    break;
+                default:
                     $this->efeitoService->respondMethodNotAllowed();
-                }
-                break;
-            case 'DELETE':
-                if ($id){
-                    $this->efeitoService->delete($id);
-                } else {
-                    $this->efeitoService->respondMethodNotAllowed();
-                }
-                break;
-            default:
-                $this->efeitoService->respondMethodNotAllowed();
+            }
+        } catch ( PDOException $e){
+        $this->efeitoService->respondInternalServerError($e);
         }
     }
 }

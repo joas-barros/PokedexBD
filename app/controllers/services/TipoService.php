@@ -1,8 +1,9 @@
 <?php 
 require_once 'app/model/repository/impl/TipoRepository.php';
 require_once 'app/model/entities/Tipo.php';
+require_once 'app/controllers/services/AbstractService.php';
 
-class TipoService{
+class TipoService extends AbstractService {
     private TipoRepository $tipoRepository;
 
     public function __construct(){
@@ -107,14 +108,6 @@ class TipoService{
                 'message' => 'Tipo não encontrado'
             ]);
         }
-    }
-
-    public function respondMethodNotAllowed() {
-        http_response_code(405);
-        echo json_encode([
-            "status" => "error",
-            "message" => "Método não permitido."
-        ]);
     }
     
 }

@@ -5,7 +5,7 @@ require_once 'app/model/entities/Fraqueza.php';
 require_once 'app/model/entities/Tipo.php';
 require_once 'app/model/repository/impl/TipoRepository.php';
 
-class FraquezaService {
+class FraquezaService extends AbstractService {
 
     private FraquezaRepository $fraquezaRepository;
     private TipoRepository $tipoRepository;
@@ -135,14 +135,6 @@ class FraquezaService {
                 'message' => 'Fraqueza não encontrada'
             ]);
         }
-    }
-
-    public function respondMethodNotAllowed() {
-        http_response_code(405);
-        echo json_encode([
-            "status" => "error",
-            "message" => "Método não permitido."
-        ]);
     }
 
 }

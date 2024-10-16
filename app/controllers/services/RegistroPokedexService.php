@@ -4,7 +4,7 @@ require_once 'app/model/repository/impl/RegistroPokedexRepository.php';
 require_once 'app/model/repository/impl/PokedexRepository.php';
 require_once 'app/model/repository/impl/TreinadorRepository.php';
 
-class RegistroPokedexService {
+class RegistroPokedexService extends AbstractService {
 
     private RegistroPokedexRepository $registroPokedexRepository;
     private PokedexRepository $pokedexRepository;
@@ -136,13 +136,6 @@ class RegistroPokedexService {
         }
     }
 
-    public function respondMethodNotAllowed() {
-        http_response_code(405);
-        echo json_encode([
-            "status" => "error",
-            "message" => "Método não permitido."
-        ]);
-    }
 
 }
 

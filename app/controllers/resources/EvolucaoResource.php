@@ -10,28 +10,32 @@ class EvolucaoResource{
     }
 
     public function handleRequest($method, $id = null){
-        switch($method){
-            case 'GET':
-                $input = json_decode(file_get_contents('php://input'), true);
-                if($input){
-                    $this->evolucaoService->findById($input);
-                } else {
-                    $this->evolucaoService->findAll();
-                }
-                break;
-            case 'POST':
-                $this->evolucaoService->save();
-                break;
-            case 'DELETE':
-                $input = json_decode(file_get_contents('php://input'), true);
-                if ($input){
-                    $this->evolucaoService->delete($input);
-                } else {
+        try {
+            switch($method){
+                case 'GET':
+                    $input = json_decode(file_get_contents('php://input'), true);
+                    if($input){
+                        $this->evolucaoService->findById($input);
+                    } else {
+                        $this->evolucaoService->findAll();
+                    }
+                    break;
+                case 'POST':
+                    $this->evolucaoService->save();
+                    break;
+                case 'DELETE':
+                    $input = json_decode(file_get_contents('php://input'), true);
+                    if ($input){
+                        $this->evolucaoService->delete($input);
+                    } else {
+                        $this->evolucaoService->respondMethodNotAllowed();
+                    }
+                    break;
+                default:
                     $this->evolucaoService->respondMethodNotAllowed();
-                }
-                break;
-            default:
-                $this->evolucaoService->respondMethodNotAllowed();
+            }
+        } catch ( PDOException $e){
+            $this->evolucaoService->respondInternalServerError($e);
         }
     }
 }
