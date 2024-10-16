@@ -22,7 +22,12 @@ class TreinadorRepository implements RepositoryInterface {
         return $treinadores;
     }
 
-    public function findById(int $id): ?Treinador {
+    public function findById(?int $id): ?Treinador {
+        
+        if ($id === null){
+            return null;
+        }
+
         $stmt = $this->pdo->prepare(" SELECT * FROM " . self::TABLE . " WHERE treinador_id = :id");
         $stmt->bindParam(':id', $id);
         $stmt->execute();

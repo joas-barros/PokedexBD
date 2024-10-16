@@ -45,7 +45,12 @@ class RegistroPokedexRepository implements RepositoryInterface {
         return $registros;
     }
 
-    public function findById(int $id): ?RegistroPokedex {
+    public function findById(?int $id): ?RegistroPokedex {
+
+        if ($id === null){
+            return null;
+        }
+        
         $stmt = $this->pdo->prepare("
         SELECT * FROM " . self::TABLE . 
         " INNER JOIN pokedex ON registro_pokedex.pokemon_id = pokedex.pokedex_num 

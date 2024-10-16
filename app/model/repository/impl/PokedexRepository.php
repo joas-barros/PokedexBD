@@ -8,58 +8,43 @@ require_once 'app/connection/DBConnection.php';
 class PokedexRepository implements RepositoryInterface {
     private PDO $pdo;
     public const TABLE = 'pokedex';
+    private TipoRepository $tipoRepository;
 
     public function __construct(){
         $this->pdo = DBConnection::getInstance()->getConnection();
+        $this->tipoRepository = new TipoRepository();
     }
 
     public function findAll(): array {
         $stmt = $this->pdo->prepare("
         SELECT 
-            pokedex.pokedex_num,
-            pokedex.pokedex_nome,
-            pokedex.pokedex_tipo_1,
-            pokedex.pokedex_tipo_2,
-            pokedex.pokedex_taxa_captura,
-            pokedex.pokedex_geracao,
-            pokedex.pokedex_info,
-            t1.tipo_nome AS tipo1_nome,
-            t1.cor AS tipo1_cor,
-            t2.tipo_nome AS tipo2_nome,
-            t2.cor AS tipo2_cor
+            *
         FROM " . self::TABLE . " 
-        INNER JOIN tipo t1 ON pokedex.Pokedex_Tipo_1 = t1.Tipo_ID 
-        INNER JOIN tipo t2 ON pokedex.Pokedex_Tipo_2 = t2.Tipo_ID
+        INNER JOIN tipo t1 ON pokedex.Pokedex_Tipo_1 = t1.Tipo_ID
     ");
         $stmt->execute();
         $result = $stmt->fetchAll();
         $pokemons = [];
         foreach($result as $row){
             $pokemons[] = new Pokedex($row['pokedex_num'], $row['pokedex_nome'], 
-            new Tipo($row['pokedex_tipo_1'], $row['tipo1_nome'], $row['tipo1_cor']),
-            new Tipo($row['pokedex_tipo_2'], $row['tipo2_nome'], $row['tipo2_cor']),
+            new Tipo($row['pokedex_tipo_1'], $row['tipo_nome'], $row['cor']),
+            $this->tipoRepository->findById($row['pokedex_tipo_2']),
             $row['pokedex_taxa_captura'], $row['pokedex_geracao'], $row['pokedex_info']);
         }
         return $pokemons;
     }
 
-    public function findById(int $id): ?Pokedex {
+    public function findById(?int $id): ?Pokedex {
+
+        if ($id === null){
+            return null;
+        }
+        
         $stmt = $this->pdo->prepare("
         SELECT 
-            pokedex.pokedex_num,
-            pokedex.pokedex_nome,
-            pokedex.pokedex_tipo_1,
-            pokedex.pokedex_tipo_2,
-            pokedex.pokedex_taxa_captura,
-            pokedex.pokedex_geracao,
-            pokedex.pokedex_info,
-            t1.tipo_nome AS tipo1_nome,
-            t1.cor AS tipo1_cor,
-            t2.tipo_nome AS tipo2_nome,
-            t2.cor AS tipo2_cor
+            *
         FROM " . self::TABLE . " 
-        INNER JOIN tipo t1 ON pokedex.Pokedex_Tipo_1 = t1.Tipo_ID 
-        INNER JOIN tipo t2 ON pokedex.Pokedex_Tipo_2 = t2.Tipo_ID
+        INNER JOIN tipo t1 ON pokedex.Pokedex_Tipo_1 = t1.Tipo_ID
         WHERE Pokedex_Num = :id");
         $stmt->bindParam(':id', $id);
         $stmt->execute();
@@ -68,15 +53,15 @@ class PokedexRepository implements RepositoryInterface {
             return null;
         }
         return new Pokedex($row['pokedex_num'], $row['pokedex_nome'], 
-        new Tipo($row['pokedex_tipo_1'], $row['tipo1_nome'], $row['tipo1_cor']),
-        new Tipo($row['pokedex_tipo_2'], $row['tipo2_nome'], $row['tipo2_cor']),
+        new Tipo($row['pokedex_tipo_1'], $row['tipo_nome'], $row['cor']),
+        $this->tipoRepository->findById($row['pokedex_tipo_2']),
         $row['pokedex_taxa_captura'], $row['pokedex_geracao'], $row['pokedex_info']);
     }
 
     public function save($obj): void {
         $nome = $obj->getNome();
         $tipo1 = $obj->getTipo1()->getId();
-        $tipo2 = $obj->getTipo2()->getId();
+        $tipo2 = $obj->getTipo2() ? $obj->getTipo2()->getId() : null;
         $taxaDeCaptura = $obj->getTaxaDeCaptura();
         $geracao = $obj->getGeracao();
         $informacao = $obj->getInformacao();
@@ -106,7 +91,7 @@ class PokedexRepository implements RepositoryInterface {
 
         $nome = $pokedexAtualizado->getNome();
         $tipo1 = $pokedexAtualizado->getTipo1()->getId();
-        $tipo2 = $pokedexAtualizado->getTipo2()->getId();
+        $tipo2 = $pokedexAtualizado->getTipo2() ? $pokedexAtualizado->getTipo2()->getId() : null;
         $taxaDeCaptura = $pokedexAtualizado->getTaxaDeCaptura();
         $geracao = $pokedexAtualizado->getGeracao();
         $informacao = $pokedexAtualizado->getInformacao();

@@ -23,7 +23,12 @@ class TipoRepository implements RepositoryInterface {
         return $tipos;
     }
 
-    public function findById(int $id): ?Tipo {
+    public function findById(?int $id): ?Tipo {
+
+        if ($id === null){
+            return null;
+        }
+
         $stmt = $this->pdo->prepare("SELECT * FROM " . self::TABLE . " WHERE Tipo_ID = :id");
         $stmt->bindParam(':id', $id);
         $stmt->execute();

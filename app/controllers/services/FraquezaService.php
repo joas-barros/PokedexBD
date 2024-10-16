@@ -36,14 +36,16 @@ class FraquezaService {
     public function save(){
         $input = json_decode(file_get_contents('php://input'), true);
 
-        if (isset($input['tipo']) && isset($input['fraqueza1']) && isset($input['fraqueza2']) && isset($input['fraqueza3']) && isset($input['fraqueza4']) && isset($input['fraqueza5'])){
+        if (isset($input['tipo']) && isset($input['fraqueza1'])){
             $tipo = $this->tipoRepository->findById($input['tipo']);
             $fraqueza1 = $this->tipoRepository->findById($input['fraqueza1']);
             $fraqueza2 = $this->tipoRepository->findById($input['fraqueza2']);
             $fraqueza3 = $this->tipoRepository->findById($input['fraqueza3']);
             $fraqueza4 = $this->tipoRepository->findById($input['fraqueza4']);
             $fraqueza5 = $this->tipoRepository->findById($input['fraqueza5']);
-            if ($tipo && $fraqueza1 && $fraqueza2 && $fraqueza3 && $fraqueza4 && $fraqueza5){
+            
+            if ($tipo && $fraqueza1 && (isset($input['fraqueza2']) ? $fraqueza2 : true) && (isset($input['fraqueza3']) ? $fraqueza3 : true) && (isset($input['fraqueza4']) ? $fraqueza4 : true) && (isset($input['fraqueza5']) ? $fraqueza5 : true)){
+
                 $novaFraqueza = new Fraqueza($tipo, $fraqueza1, $fraqueza2, $fraqueza3, $fraqueza4, $fraqueza5);
                 if($novaFraqueza){
                     $this->fraquezaRepository->save($novaFraqueza);
@@ -78,14 +80,14 @@ class FraquezaService {
     public function update(int $id){
         $input = json_decode(file_get_contents('php://input'), true);
 
-        if ( isset($input['fraqueza1']) && isset($input['fraqueza2']) && isset($input['fraqueza3']) && isset($input['fraqueza4']) && isset($input['fraqueza5'])){
+        if ( isset($input['fraqueza1']) ){
             $tipo = $this->tipoRepository->findById($id);
             $fraqueza1 = $this->tipoRepository->findById($input['fraqueza1']);
             $fraqueza2 = $this->tipoRepository->findById($input['fraqueza2']);
             $fraqueza3 = $this->tipoRepository->findById($input['fraqueza3']);
             $fraqueza4 = $this->tipoRepository->findById($input['fraqueza4']);
             $fraqueza5 = $this->tipoRepository->findById($input['fraqueza5']);
-            if ($fraqueza1 && $fraqueza2 && $fraqueza3 && $fraqueza4 && $fraqueza5){
+            if ($fraqueza1 && (isset($input['fraqueza2']) ? $fraqueza2 : true) && (isset($input['fraqueza3']) ? $fraqueza3 : true) && (isset($input['fraqueza4']) ? $fraqueza4 : true) && (isset($input['fraqueza5']) ? $fraqueza5 : true)){
                 $fraquezaAtualizada = new Fraqueza($tipo, $fraqueza1, $fraqueza2, $fraqueza3, $fraqueza4, $fraqueza5);
                 $fraqueza = $this->fraquezaRepository->update($id, $fraquezaAtualizada);
                 if($fraqueza){

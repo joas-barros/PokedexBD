@@ -22,7 +22,12 @@ class EfeitoRepository implements RepositoryInterface {
         return $efeitos;
     }
 
-    public function findById(int $id): ?Efeito {
+    public function findById(?int $id): ?Efeito {
+
+        if ($id === null){
+            return null;
+        }
+        
         $stmt = $this->pdo->prepare("SELECT * FROM " . self::TABLE . " WHERE Efeito_ID = :id");
         $stmt->bindParam(':id', $id);
         $stmt->execute();

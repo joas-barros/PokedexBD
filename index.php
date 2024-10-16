@@ -54,10 +54,10 @@ $id = $_GET['id'] ?? null;
 // }
 
 // Instanciar o controller
-//  $controller = new CapturadosResource();
-//  $controller->handleRequest($method, $id);
+  $controller = new PokemonResource();
+  $controller->handleRequest($method, $id);
 
-PDF::generateCapturadosLogPDF();
+//PDF::generateCapturadosLogPDF();
 
 
 ?>

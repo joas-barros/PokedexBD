@@ -40,11 +40,11 @@ class HabilidadeService{
     public function save(){
         $input = json_decode(file_get_contents('php://input'), true);
 
-        if (isset($input['nome']) && isset($input['descricao']) && isset($input['tipo']) && isset($input['efeito'])){
+        if (isset($input['nome']) && isset($input['descricao']) && isset($input['tipo'])){
             $tipo = $this->tipoRepository->findById($input['tipo']);
             $efeito = $this->efeitoRepository->findById($input['efeito']);
             
-            if($tipo && $efeito){
+            if($tipo && (isset($input['efeito']) ? $efeito : true)){
                 $novaHabilidade = new Habilidade(0, $input['nome'], $input['descricao'], $efeito, $tipo);
                 $this->habilidadeRepository->save($novaHabilidade);
                 http_response_code(201);
@@ -71,11 +71,11 @@ class HabilidadeService{
     public function update(int $id){
         $input = json_decode(file_get_contents('php://input'), true);
 
-        if (isset($input['nome']) && isset($input['descricao']) && isset($input['tipo']) && isset($input['efeito'])){
+        if (isset($input['nome']) && isset($input['descricao']) && isset($input['tipo'])){
             $tipo = $this->tipoRepository->findById($input['tipo']);
             $efeito = $this->efeitoRepository->findById($input['efeito']);
             
-            if($tipo && $efeito){
+            if($tipo && (isset($input['efeito']) ? $efeito : true)){
                 $habilidade = new Habilidade($id, $input['nome'], $input['descricao'], $efeito, $tipo);
                 $habilidadeNova = $this->habilidadeRepository->update($id, $habilidade);
                 if ($habilidadeNova){

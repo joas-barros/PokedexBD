@@ -34,10 +34,10 @@ class PokedexService {
     public function save(){
         $input = json_decode(file_get_contents('php://input'), true);
 
-        if (isset($input['nome']) && isset($input['tipo1']) && isset($input['tipo2']) && isset($input['taxaDeCaptura']) && isset($input['geracao']) && isset($input['informacao'])){
+        if (isset($input['nome']) && isset($input['tipo1']) && isset($input['taxaDeCaptura']) && isset($input['geracao']) && isset($input['informacao'])){
             $tipo1 = $this->tipoRepository->findById($input['tipo1']);
             $tipo2 = $this->tipoRepository->findById($input['tipo2']);
-            if ($tipo1 && $tipo2){
+            if ($tipo1 && (isset($input['tipo2']) ? $tipo2 : true)){
                 $novoPokemon = new Pokedex(0, $input['nome'], $tipo1, $tipo2, $input['taxaDeCaptura'], $input['geracao'], $input['informacao']);
                 if($novoPokemon){
                     $this->pokedexRepository->save($novoPokemon);
@@ -73,10 +73,10 @@ class PokedexService {
     public function update(int $id){
         $input = json_decode(file_get_contents('php://input'), true);
 
-        if (isset($input['nome']) && isset($input['tipo1']) && isset($input['tipo2']) && isset($input['taxaDeCaptura']) && isset($input['geracao']) && isset($input['informacao'])){
+        if (isset($input['nome']) && isset($input['tipo1']) && isset($input['taxaDeCaptura']) && isset($input['geracao']) && isset($input['informacao'])){
             $tipo1 = $this->tipoRepository->findById($input['tipo1']);
             $tipo2 = $this->tipoRepository->findById($input['tipo2']);
-            if ($tipo1 && $tipo2){
+            if ($tipo1 && (isset($input['tipo2']) ? $tipo2 : true)){
                 $pokemon = new Pokedex($id, $input['nome'], $tipo1, $tipo2, $input['taxaDeCaptura'], $input['geracao'], $input['informacao']);
                 $pokemonAtualizado = $this->pokedexRepository->update($id, $pokemon);
                 if($pokemonAtualizado){

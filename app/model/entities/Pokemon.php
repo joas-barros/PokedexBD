@@ -5,9 +5,9 @@ class Pokemon implements JsonSerializable {
     private Pokedex $pokedex;
     private string $nome;
     private Habilidade $habilidade1;
-    private Habilidade $habilidade2;
-    private Habilidade $habilidade3;
-    private Habilidade $habilidade4;
+    private ?Habilidade $habilidade2;
+    private ?Habilidade $habilidade3;
+    private ?Habilidade $habilidade4;
     private int $level_min;
     private int $level_max;
     private int $hp_min;
@@ -27,7 +27,7 @@ class Pokemon implements JsonSerializable {
     private float $peso;
     private string $pokemonIMG;
 
-    public function __construct(Pokedex $pokedex, string $nome, Habilidade $habilidade1, Habilidade $habilidade2, Habilidade $habilidade3, Habilidade $habilidade4, int $level_min=1, int $level_max=100, int $hp_min, int $hp_max, int $attack_min, int $attack_max, int $defense_min, int $defense_max, int $sp_attack_min, int $sp_attack_max, int $sp_defense_min, int $sp_defense_max, int $velocidade_min, int $velocidade_max, string $sexo, float $altura, float $peso, string $pokemonIMG) {
+    public function __construct(Pokedex $pokedex, string $nome, Habilidade $habilidade1, ?Habilidade $habilidade2, ?Habilidade $habilidade3, ?Habilidade $habilidade4, int $level_min=1, int $level_max=100, int $hp_min, int $hp_max, int $attack_min, int $attack_max, int $defense_min, int $defense_max, int $sp_attack_min, int $sp_attack_max, int $sp_defense_min, int $sp_defense_max, int $velocidade_min, int $velocidade_max, string $sexo, float $altura, float $peso, string $pokemonIMG) {
         $this->pokedex = $pokedex;
         $this->nome = $nome;
         $this->habilidade1 = $habilidade1;
@@ -79,27 +79,27 @@ class Pokemon implements JsonSerializable {
         $this->habilidade1 = $habilidade1;
     }
 
-    public function getHabilidade2(): Habilidade {
+    public function getHabilidade2(): ?Habilidade {
         return $this->habilidade2;
     }
 
-    public function setHabilidade2(Habilidade $habilidade2): void {
+    public function setHabilidade2(?Habilidade $habilidade2): void {
         $this->habilidade2 = $habilidade2;
     }
 
-    public function getHabilidade3(): Habilidade {
+    public function getHabilidade3(): ?Habilidade {
         return $this->habilidade3;
     }
 
-    public function setHabilidade3(Habilidade $habilidade3): void {
+    public function setHabilidade3(?Habilidade $habilidade3): void {
         $this->habilidade3 = $habilidade3;
     }
 
-    public function getHabilidade4(): Habilidade {
+    public function getHabilidade4(): ?Habilidade {
         return $this->habilidade4;
     }
 
-    public function setHabilidade4(Habilidade $habilidade4): void {
+    public function setHabilidade4(?Habilidade $habilidade4): void {
         $this->habilidade4 = $habilidade4;
     }
 

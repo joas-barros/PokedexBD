@@ -8,63 +8,24 @@ class PokemonRepository implements RepositoryInterface {
     private PokedexRepository $pokedexRepository;
     private EfeitoRepository $efeitoRepository;
     private TipoRepository $tipoRepository;
+    private HabilidadeRepository $habilidadeRepository;
 
     public function __construct(){
         $this->pdo = DBConnection::getInstance()->getConnection();
         $this->pokedexRepository = new PokedexRepository();
         $this->efeitoRepository = new EfeitoRepository();
         $this->tipoRepository = new TipoRepository();
+        $this->habilidadeRepository = new HabilidadeRepository();
     }
 
     public function findAll(): array {
         
         $stmt = $this->pdo->prepare("
         SELECT
-        p.pokemon_id,
-        p.pokemon_nome,
-        h1.habilidade_id as habilidade1_id,
-        h1.habilidade_nome as habilidade1_nome,
-        h1.habilidade_descricao as habilidade1_descricao,
-        h1.habilidade_efeito as habilidade1_efeito,
-        h1.habilidade_tipo as habilidade1_tipo,
-        h2.habilidade_id as habilidade2_id,
-        h2.habilidade_nome as habilidade2_nome,
-        h2.habilidade_descricao as habilidade2_descricao,
-        h2.habilidade_efeito as habilidade2_efeito,
-        h2.habilidade_tipo as habilidade2_tipo,
-        h3.habilidade_id as habilidade3_id,
-        h3.habilidade_nome as habilidade3_nome,
-        h3.habilidade_descricao as habilidade3_descricao,
-        h3.habilidade_efeito as habilidade3_efeito,
-        h3.habilidade_tipo as habilidade3_tipo,
-        h4.habilidade_id as habilidade4_id,
-        h4.habilidade_nome as habilidade4_nome,
-        h4.habilidade_descricao as habilidade4_descricao,
-        h4.habilidade_efeito as habilidade4_efeito,
-        h4.habilidade_tipo as habilidade4_tipo,
-        p.pokemon_level_min,
-        p.pokemon_level_max,
-        p.pokemon_hp_min,
-        p.pokemon_hp_max,
-        p.pokemon_atk_min,
-        p.pokemon_atk_max,
-        p.pokemon_def_min,
-        p.pokemon_def_max,
-        p.pokemon_sp_atk_min,
-        p.pokemon_sp_atk_max,
-        p.pokemon_sp_def_min,
-        p.pokemon_sp_def_max,
-        p.pokemon_velocidade_min,
-        p.pokemon_velocidade_max,
-        p.pokemon_sexo,
-        p.pokemon_altura,
-        p.pokemon_peso,
-        p.pokemon_img 
+        * 
         from " . self::TABLE . " as p
         inner join habilidade h1 on p.Pokemon_Habilidade_1 = h1.habilidade_id 
-        inner join habilidade h2 on p.Pokemon_Habilidade_2 = h2.habilidade_id 
-        inner join habilidade h3 on p.Pokemon_Habilidade_3 = h3.habilidade_id 
-        inner join habilidade h4 on p.Pokemon_Habilidade_4 = h4.habilidade_id");
+        ");
         $stmt->execute();
         $result = $stmt->fetchAll();
         $pokemons = [];
@@ -72,10 +33,10 @@ class PokemonRepository implements RepositoryInterface {
             $pokemons[] = new Pokemon(
                 $this->pokedexRepository->findById($row['pokemon_id']),
                 $row['pokemon_nome'],
-                new Habilidade($row['habilidade1_id'], $row['habilidade1_nome'], $row['habilidade1_descricao'], $this->efeitoRepository->findById( $row['habilidade1_efeito']),$this->tipoRepository->findById($row['habilidade1_tipo'])),
-                new Habilidade($row['habilidade2_id'], $row['habilidade2_nome'], $row['habilidade2_descricao'], $this->efeitoRepository->findById( $row['habilidade2_efeito']),$this->tipoRepository->findById($row['habilidade2_tipo'])),
-                new Habilidade($row['habilidade3_id'], $row['habilidade3_nome'], $row['habilidade3_descricao'], $this->efeitoRepository->findById( $row['habilidade3_efeito']),$this->tipoRepository->findById($row['habilidade3_tipo'])),
-                new Habilidade($row['habilidade4_id'], $row['habilidade4_nome'], $row['habilidade4_descricao'], $this->efeitoRepository->findById( $row['habilidade4_efeito']),$this->tipoRepository->findById($row['habilidade4_tipo'])),
+                new Habilidade($row['habilidade_id'], $row['habilidade_nome'], $row['habilidade_descricao'], $this->efeitoRepository->findById( $row['habilidade_efeito']),$this->tipoRepository->findById($row['habilidade_tipo'])),
+                $this->habilidadeRepository->findById($row['pokemon_habilidade_2']),
+                $this->habilidadeRepository->findById($row['pokemon_habilidade_3']),
+                $this->habilidadeRepository->findById($row['pokemon_habilidade_4']),
                 $row['pokemon_level_min'],
                 $row['pokemon_level_max'],
                 $row['pokemon_hp_min'],
@@ -99,54 +60,17 @@ class PokemonRepository implements RepositoryInterface {
         return $pokemons;
     }
 
-    public function findById(int $id): ?Pokemon {
+    public function findById(?int $id): ?Pokemon {
+
+        if ($id === null){
+            return null;
+        }
+        
         $stmt = $this->pdo->prepare("
         SELECT
-        p.pokemon_id,
-        p.pokemon_nome,
-        h1.habilidade_id as habilidade1_id,
-        h1.habilidade_nome as habilidade1_nome,
-        h1.habilidade_descricao as habilidade1_descricao,
-        h1.habilidade_efeito as habilidade1_efeito,
-        h1.habilidade_tipo as habilidade1_tipo,
-        h2.habilidade_id as habilidade2_id,
-        h2.habilidade_nome as habilidade2_nome,
-        h2.habilidade_descricao as habilidade2_descricao,
-        h2.habilidade_efeito as habilidade2_efeito,
-        h2.habilidade_tipo as habilidade2_tipo,
-        h3.habilidade_id as habilidade3_id,
-        h3.habilidade_nome as habilidade3_nome,
-        h3.habilidade_descricao as habilidade3_descricao,
-        h3.habilidade_efeito as habilidade3_efeito,
-        h3.habilidade_tipo as habilidade3_tipo,
-        h4.habilidade_id as habilidade4_id,
-        h4.habilidade_nome as habilidade4_nome,
-        h4.habilidade_descricao as habilidade4_descricao,
-        h4.habilidade_efeito as habilidade4_efeito,
-        h4.habilidade_tipo as habilidade4_tipo,
-        p.pokemon_level_min,
-        p.pokemon_level_max,
-        p.pokemon_hp_min,
-        p.pokemon_hp_max,
-        p.pokemon_atk_min,
-        p.pokemon_atk_max,
-        p.pokemon_def_min,
-        p.pokemon_def_max,
-        p.pokemon_sp_atk_min,
-        p.pokemon_sp_atk_max,
-        p.pokemon_sp_def_min,
-        p.pokemon_sp_def_max,
-        p.pokemon_velocidade_min,
-        p.pokemon_velocidade_max,
-        p.pokemon_sexo,
-        p.pokemon_altura,
-        p.pokemon_peso,
-        p.pokemon_img 
+        * 
         from " . self::TABLE . " as p
-        inner join habilidade h1 on p.Pokemon_Habilidade_1 = h1.habilidade_id 
-        inner join habilidade h2 on p.Pokemon_Habilidade_2 = h2.habilidade_id 
-        inner join habilidade h3 on p.Pokemon_Habilidade_3 = h3.habilidade_id
-        inner join habilidade h4 on p.Pokemon_Habilidade_4 = h4.habilidade_id
+        inner join habilidade h1 on p.Pokemon_Habilidade_1 = h1.habilidade_id
         where p.pokemon_id = :id");
         $stmt->bindParam(':id', $id);
         $stmt->execute();
@@ -157,10 +81,10 @@ class PokemonRepository implements RepositoryInterface {
         return new Pokemon(
             $this->pokedexRepository->findById($row['pokemon_id']),
             $row['pokemon_nome'],
-            new Habilidade($row['habilidade1_id'], $row['habilidade1_nome'], $row['habilidade1_descricao'], $this->efeitoRepository->findById( $row['habilidade1_efeito']),$this->tipoRepository->findById($row['habilidade1_tipo'])),
-            new Habilidade($row['habilidade2_id'], $row['habilidade2_nome'], $row['habilidade2_descricao'], $this->efeitoRepository->findById( $row['habilidade2_efeito']),$this->tipoRepository->findById($row['habilidade2_tipo'])),
-            new Habilidade($row['habilidade3_id'], $row['habilidade3_nome'], $row['habilidade3_descricao'], $this->efeitoRepository->findById( $row['habilidade3_efeito']),$this->tipoRepository->findById($row['habilidade3_tipo'])),
-            new Habilidade($row['habilidade4_id'], $row['habilidade4_nome'], $row['habilidade4_descricao'], $this->efeitoRepository->findById( $row['habilidade4_efeito']),$this->tipoRepository->findById($row['habilidade4_tipo'])),
+            new Habilidade($row['habilidade_id'], $row['habilidade_nome'], $row['habilidade_descricao'], $this->efeitoRepository->findById( $row['habilidade_efeito']),$this->tipoRepository->findById($row['habilidade_tipo'])),
+            $this->habilidadeRepository->findById($row['pokemon_habilidade_2']),
+            $this->habilidadeRepository->findById($row['pokemon_habilidade_3']),
+            $this->habilidadeRepository->findById($row['pokemon_habilidade_4']),
             $row['pokemon_level_min'],
             $row['pokemon_level_max'],
             $row['pokemon_hp_min'],
@@ -187,9 +111,9 @@ class PokemonRepository implements RepositoryInterface {
         $pokemon_id = $pokemon->getPokedex()->getId();
         $pokemon_nome = $pokemon->getNome();
         $habilidade1 = $pokemon->getHabilidade1()->getId();
-        $habilidade2 = $pokemon->getHabilidade2()->getId();
-        $habilidade3 = $pokemon->getHabilidade3()->getId();
-        $habilidade4 = $pokemon->getHabilidade4()->getId();
+        $habilidade2 = $pokemon->getHabilidade2() ? $pokemon->getHabilidade2()->getId() : null;
+        $habilidade3 = $pokemon->getHabilidade3() ? $pokemon->getHabilidade3()->getId() : null;
+        $habilidade4 = $pokemon->getHabilidade4() ? $pokemon->getHabilidade4()->getId() : null;
         $pokemon_level_min = $pokemon->getLevelMin();
         $pokemon_level_max = $pokemon->getLevelMax();
         $pokemon_hp_min = $pokemon->getHpMin();
@@ -247,9 +171,9 @@ class PokemonRepository implements RepositoryInterface {
         }
         $pokemon_nome = $pokemon->getNome();
         $habilidade1 = $pokemon->getHabilidade1()->getId();
-        $habilidade2 = $pokemon->getHabilidade2()->getId();
-        $habilidade3 = $pokemon->getHabilidade3()->getId();
-        $habilidade4 = $pokemon->getHabilidade4()->getId();
+        $habilidade2 = $pokemon->getHabilidade2() ? $pokemon->getHabilidade2()->getId() : null;
+        $habilidade3 = $pokemon->getHabilidade3() ? $pokemon->getHabilidade3()->getId() : null;
+        $habilidade4 = $pokemon->getHabilidade4() ? $pokemon->getHabilidade4()->getId() : null;
         $pokemon_level_min = $pokemon->getLevelMin();
         $pokemon_level_max = $pokemon->getLevelMax();
         $pokemon_hp_min = $pokemon->getHpMin();

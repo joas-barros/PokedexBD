@@ -34,7 +34,7 @@ class FraquezaRepository implements RepositoryInterface {
     }
 
     public function findById(int $id): ?Fraqueza {
-        $stmt = $this->connection->prepare('SELECT * FROM' . self::TABLE . 'WHERE tipo_id = :id');
+        $stmt = $this->connection->prepare('SELECT * FROM ' . self::TABLE . ' WHERE tipo_id = :id');
         $stmt->bindParam(':id', $id);
         $stmt->execute();
         $row = $stmt->fetch();
@@ -55,17 +55,17 @@ class FraquezaRepository implements RepositoryInterface {
         $stmt = $this->connection->prepare('INSERT INTO ' . self::TABLE . ' (tipo_id, fraqueza_1_id, fraqueza_2_id, fraqueza_3_id, fraqueza_4_id, fraqueza_5_id) VALUES (:tipo_id, :fraqueza_1_id, :fraqueza_2_id, :fraqueza_3_id, :fraqueza_4_id, :fraqueza_5_id)');
         $stmt->bindValue(':tipo_id', $fraqueza->getTipo()->getId());
         $stmt->bindValue(':fraqueza_1_id', $fraqueza->getFraqueza1()->getId());
-        $stmt->bindValue(':fraqueza_2_id', $fraqueza->getFraqueza2()->getId());
-        $stmt->bindValue(':fraqueza_3_id', $fraqueza->getFraqueza3()->getId());
-        $stmt->bindValue(':fraqueza_4_id', $fraqueza->getFraqueza4()->getId());
-        $stmt->bindValue(':fraqueza_5_id', $fraqueza->getFraqueza5()->getId());
+        $stmt->bindValue(':fraqueza_2_id', $fraqueza->getFraqueza2() ? $fraqueza->getFraqueza2()->getId() : null);
+        $stmt->bindValue(':fraqueza_3_id', $fraqueza->getFraqueza3() ? $fraqueza->getFraqueza3()->getId() : null);
+        $stmt->bindValue(':fraqueza_4_id', $fraqueza->getFraqueza4() ? $fraqueza->getFraqueza4()->getId() : null);
+        $stmt->bindValue(':fraqueza_5_id', $fraqueza->getFraqueza5() ? $fraqueza->getFraqueza5()->getId() : null);
         $stmt->execute();
     }
 
-    public function update(int $id, $fraquezaAtualizada): ?Fraqueza {
-        $fraquezaAntiga = $this->findById($id);
+    public function update(int $id, $fraquezaAntiga): ?Fraqueza {
+        $fraquezaAtualizada = $this->findById($id);
 
-        if($fraquezaAntiga === null){
+        if($fraquezaAtualizada === null){
             return null;
         }
 
@@ -76,10 +76,10 @@ class FraquezaRepository implements RepositoryInterface {
         $fraquezaAtualizada->setFraqueza5($fraquezaAntiga->getFraqueza5());
 
         $fraqueza_id_1 = $fraquezaAtualizada->getFraqueza1()->getId();
-        $fraqueza_id_2 = $fraquezaAtualizada->getFraqueza2()->getId();
-        $fraqueza_id_3 = $fraquezaAtualizada->getFraqueza3()->getId();
-        $fraqueza_id_4 = $fraquezaAtualizada->getFraqueza4()->getId();
-        $fraqueza_id_5 = $fraquezaAtualizada->getFraqueza5()->getId();
+        $fraqueza_id_2 = $fraquezaAtualizada->getFraqueza2() ? $fraquezaAtualizada->getFraqueza2()->getId() : null;
+        $fraqueza_id_3 = $fraquezaAtualizada->getFraqueza3() ? $fraquezaAtualizada->getFraqueza3()->getId() : null;
+        $fraqueza_id_4 = $fraquezaAtualizada->getFraqueza4() ? $fraquezaAtualizada->getFraqueza4()->getId() : null;
+        $fraqueza_id_5 = $fraquezaAtualizada->getFraqueza5() ? $fraquezaAtualizada->getFraqueza5()->getId() : null;
 
         $stmt = $this->connection->prepare('
             UPDATE 

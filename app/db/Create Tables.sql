@@ -22,7 +22,11 @@ CONSTRAINT FK_FRAQUEZA_4_ID FOREIGN KEY(Fraqueza_4_ID) REFERENCES TIPO(TIPO_ID) 
 CONSTRAINT FK_FRAQUEZA_5_ID FOREIGN KEY(Fraqueza_5_ID) REFERENCES TIPO(TIPO_ID) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
+select * from fraquezas;
 
+insert into fraquezas (Tipo_ID, Fraqueza_1_ID) values (1, 2);
+
+select * from tipo;
 
 CREATE TABLE EFEITO (
 Efeito_ID Serial PRIMARY KEY,
@@ -42,6 +46,11 @@ Habilidade_Efeito Int,
 CONSTRAINT FK_TIPO FOREIGN KEY (Habilidade_Tipo) REFERENCES TIPO(Tipo_ID) ON DELETE RESTRICT ON UPDATE CASCADE,
 CONSTRAINT FK_EFEITO FOREIGN KEY (Habilidade_Efeito) REFERENCES EFEITO(Efeito_ID) ON DELETE RESTRICT ON UPDATE CASCADE
 );
+
+INSERT INTO HABILIDADE (Habilidade_Tipo, Habilidade_Nome, Habilidade_Descricao, Habilidade_Efeito)
+	values (1, 'Barrage', 'Objetos redondos são arremessados no alvo para atingir duas a cinco vezes seguidas.', NULL);
+
+select * from habilidade INNER JOIN tipo ON habilidade.Habilidade_Tipo = tipo.Tipo_ID;
 
 insert into HABILIDADE(Habilidade_Tipo, Habilidade_Nome, Habilidade_Descricao, Habilidade_Efeito) values (2, 'Choque do trovão', 'Da um choque e é do trovão', 1);
 select * from habilidade;
@@ -66,7 +75,7 @@ insert into POKEDEX (Pokedex_Nome, Pokedex_Tipo_1, Pokedex_Tipo_2, Pokedex_Taxa_
 
 select * from pokedex;
 
-select * from pokedex INNER JOIN tipo as t1 ON pokedex.Pokedex_Tipo_1 = t1.Tipo_ID INNER JOIN tipo as t2 ON pokedex.Pokedex_Tipo_2 = t2.Tipo_ID;
+select * from pokedex INNER JOIN tipo as t1 ON pokedex.Pokedex_Tipo_1 = t1.Tipo_ID;
 
 CREATE TABLE EVOLUCAO(
 Anterior Int,
@@ -142,50 +151,9 @@ insert into pokemon
 	(1, 'bulbasaur', 2, 2, 2, 2, 30, 80, 50, 90, 50, 50, 10, 10, 10, 10, 30, 30, 40, 40, 'F', 50, 0.8, 'bulba');
 
 select 
-		p.pokemon_id,
-        p.pokemon_nome,
-        h1.habilidade_id as habilidade1_id,
-        h1.habilidade_nome as habilidade1_nome,
-        h1.habilidade_descricao as habilidade1_descricao,
-        h1.habilidade_efeito as habilidade1_efeito,
-        h1.habilidade_tipo as habilidade1_tipo,
-        h2.habilidade_id as habilidade2_id,
-        h2.habilidade_nome as habilidade2_nome,
-        h2.habilidade_descricao as habilidade2_descricao,
-        h2.habilidade_efeito as habilidade2_efeito,
-        h2.habilidade_tipo as habilidade2_tipo,
-        h3.habilidade_id as habilidade3_id,
-        h3.habilidade_nome as habilidade3_nome,
-        h3.habilidade_descricao as habilidade3_descricao,
-        h3.habilidade_efeito as habilidade3_efeito,
-        h3.habilidade_tipo as habilidade3_tipo,
-        h4.habilidade_id as habilidade4_id,
-        h4.habilidade_nome as habilidade4_nome,
-        h4.habilidade_descricao as habilidade4_descricao,
-        h4.habilidade_efeito as habilidade4_efeito,
-        h4.habilidade_tipo as habilidade4_tipo,
-        p.Pokemon_level_min,
-        p.Pokemon_level_max,
-        p.Pokemon_hp_min,
-        p.Pokemon_hp_max,
-        p.Pokemon_atk_min,
-        p.Pokemon_atk_max,
-        p.Pokemon_def_min,
-        p.Pokemon_def_max,
-        p.Pokemon_sp_atk_min,
-        p.Pokemon_sp_atk_max,
-        p.Pokemon_sp_def_min,
-        p.Pokemon_sp_def_max,
-        p.Pokemon_velocidade_min,
-        p.Pokemon_velocidade_max,
-        p.Pokemon_sexo,
-        p.Pokemon_altura,
-        p.Pokemon_peso,
-        p.pokemon_img from pokemon as p
-		inner join habilidade h1 on p.Pokemon_Habilidade_1 = h1.habilidade_id 
-        inner join habilidade h2 on p.Pokemon_Habilidade_2 = h2.habilidade_id 
-        inner join habilidade h3 on p.Pokemon_Habilidade_3 = h3.habilidade_id 
-        inner join habilidade h4 on p.Pokemon_Habilidade_4 = h4.habilidade_id;
+		*
+		from pokemon as p
+		inner join habilidade h1 on p.Pokemon_Habilidade_1 = h1.habilidade_id;
 	
 select * from pokemon;
 
@@ -193,6 +161,16 @@ CREATE TABLE TREINADOR(
 Treinador_ID Serial PRIMARY KEY,
 Treinador_Nome Text NOT NULL
 );
+
+CREATE TABLE TREINADOR(
+	Treinador_ID Serial PRIMARY KELL,
+	Treinador_Nome Text NOT NULL,
+	Treinador_Email Text NOT NULL,
+	Treinador_Senha Text UNIQUE NOT NULL,
+	Treinador_Data_Nascimento Date NOT NULL
+);
+
+drop table treinador;
 
 select * from treinador;
 

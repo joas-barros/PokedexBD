@@ -6,26 +6,33 @@ require_once 'app/connection/DBConnection.php';
 class HabilidadeRepository implements RepositoryInterface {
     private PDO $pdo;
     public const TABLE = 'habilidade';
+    private EfeitoRepository $efeitoRepository;
 
     public function __construct(){
         $this->pdo = DBConnection::getInstance()->getConnection();
+        $this->efeitoRepository = new EfeitoRepository();
     }
 
     public function findAll(): array {
-        $stmt = $this->pdo->prepare("SELECT * FROM " . self::TABLE . " INNER JOIN tipo ON habilidade.Habilidade_Tipo = tipo.Tipo_ID INNER JOIN efeito ON habilidade.Habilidade_Efeito = efeito.Efeito_ID");
+        $stmt = $this->pdo->prepare("SELECT * FROM " . self::TABLE . " INNER JOIN tipo ON habilidade.Habilidade_Tipo = tipo.Tipo_ID");
         $stmt->execute();
         $result = $stmt->fetchAll();
         $habilidades = [];
         foreach($result as $row){
             $habilidades[] = new Habilidade($row['habilidade_id'], $row['habilidade_nome'], $row['habilidade_descricao'], 
-            new Efeito($row['habilidade_efeito'], $row['efeito_nome'], $row['efeito_info']), 
+            $this->efeitoRepository->findById($row['habilidade_efeito']), 
             new Tipo($row['habilidade_tipo'], $row['tipo_nome'], $row['cor']));
         }
         return $habilidades;
     }
 
-    public function findById(int $id): ?Habilidade {
-        $stmt = $this->pdo->prepare("SELECT * FROM " . self::TABLE . " INNER JOIN tipo ON habilidade.Habilidade_Tipo = tipo.Tipo_ID INNER JOIN efeito ON habilidade.Habilidade_Efeito = efeito.Efeito_ID WHERE habilidade.Habilidade_ID = :id");
+    public function findById(?int $id): ?Habilidade {
+
+        if ($id === null){
+            return null;
+        }
+        
+        $stmt = $this->pdo->prepare("SELECT * FROM " . self::TABLE . " INNER JOIN tipo ON habilidade.Habilidade_Tipo = tipo.Tipo_ID WHERE Habilidade_ID = :id");
         $stmt->bindParam(':id', $id);
         $stmt->execute();
         $row = $stmt->fetch();
@@ -33,7 +40,7 @@ class HabilidadeRepository implements RepositoryInterface {
             return null;
         }
         return new Habilidade($row['habilidade_id'], $row['habilidade_nome'], $row['habilidade_descricao'], 
-        new Efeito($row['habilidade_efeito'], $row['efeito_nome'], $row['efeito_info']), 
+        $this->efeitoRepository->findById($row['habilidade_efeito']), 
         new Tipo($row['habilidade_tipo'], $row['tipo_nome'], $row['cor']));
     }
 
@@ -41,7 +48,7 @@ class HabilidadeRepository implements RepositoryInterface {
 
         $nome = $obj->getNome();
         $descricao = $obj->getDescricao();
-        $efeito = $obj->getEfeito()->getId();
+        $efeito = $obj->getEfeito() ? $obj->getEfeito()->getId() : null;
         $tipo = $obj->getTipo()->getId();
 
         $stmt = $this->pdo->prepare("INSERT INTO " . self::TABLE . " (Habilidade_Nome, Habilidade_Descricao, Habilidade_Efeito, Habilidade_Tipo) VALUES (:nome, :descricao, :efeito, :tipo)");
@@ -60,7 +67,7 @@ class HabilidadeRepository implements RepositoryInterface {
         }
         $nome = $obj->getNome();
         $descricao = $obj->getDescricao();
-        $efeito = $obj->getEfeito()->getId();
+        $efeito = $obj->getEfeito() ? $obj->getEfeito()->getId() : null;
         $tipo = $obj->getTipo()->getId();
 
         $stmt = $this->pdo->prepare("UPDATE " . self::TABLE . " SET Habilidade_Nome = :nome, Habilidade_Descricao = :descricao, Habilidade_Efeito = :efeito, Habilidade_Tipo = :tipo WHERE Habilidade_ID = :id");

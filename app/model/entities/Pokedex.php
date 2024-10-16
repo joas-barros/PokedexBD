@@ -5,12 +5,12 @@ class Pokedex implements JsonSerializable {
     private int $id;
     private string $name;
     private Tipo $tipo1;
-    private Tipo $tipo2;
+    private ?Tipo $tipo2;
     private float $taxaDeCaptura;
     private int $geracao;
     private string $informacao;
 
-    public function __construct(int $id, string $name, Tipo $tipo1, Tipo $tipo2, float $taxaDeCaptura, int $geracao, string $informacao) {
+    public function __construct(int $id, string $name, Tipo $tipo1, ?Tipo $tipo2, float $taxaDeCaptura, int $geracao, string $informacao) {
         $this->id = $id;
         $this->name = $name;
         $this->tipo1 = $tipo1;
@@ -45,11 +45,11 @@ class Pokedex implements JsonSerializable {
         $this->tipo1 = $tipo1;
     }
 
-    public function getTipo2(): Tipo {
+    public function getTipo2(): ?Tipo {
         return $this->tipo2;
     }
 
-    public function setTipo2(Tipo $tipo2): void {
+    public function setTipo2(?Tipo $tipo2): void {
         $this->tipo2 = $tipo2;
     }
 
@@ -81,8 +81,8 @@ class Pokedex implements JsonSerializable {
         return [
             'id' => $this->id,
             'nome' => $this->name,
-            'tipo1' => $this->tipo1->jsonSerialize(),
-            'tipo2' => $this->tipo2->jsonSerialize(),
+            'tipo1' => $this->tipo1,
+            'tipo2' => $this->tipo2,
             'taxaDeCaptura' => $this->taxaDeCaptura,
             'geracao' => $this->geracao,
             'informacao' => $this->informacao
