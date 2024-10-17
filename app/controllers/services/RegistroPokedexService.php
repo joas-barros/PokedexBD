@@ -41,7 +41,7 @@ class RegistroPokedexService extends AbstractService {
             $pokemon = $this->pokedexRepository->findById($input['pokemon']);
             $treinador = $this->treinadorRepository->findById($input['treinador']);
             if ($pokemon && $treinador){
-                $novoRegistro = new RegistroPokedex($pokemon, $treinador, $dataCaptura = new DateTime(), $hp = 100, $ataque = 100, $defesa = 100, $ataqueEspecial = 100, $defesaEspecial = 100, $velocidade = 100, $nivel = 1);
+                $novoRegistro = new RegistroPokedex($pokemon, $treinador, $dataCaptura = new DateTime());
                 if($novoRegistro){
                     $this->registroPokedexRepository->save($novoRegistro);
                     http_response_code(201);

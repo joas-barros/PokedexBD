@@ -5,14 +5,12 @@ class Habilidade implements JsonSerializable {
     private string $nome;
     private string $descricao;
     private ?Efeito $efeito;
-    private Tipo $tipo;
 
-    public function __construct(int $id = 0, string $nome, string $descricao, ?Efeito $efeito, Tipo $tipo){
+    public function __construct(int $id = 0, string $nome, string $descricao, ?Efeito $efeito){
         $this->id = $id;
         $this->nome = $nome;
         $this->descricao = $descricao;
         $this->efeito = $efeito;
-        $this->tipo = $tipo;
     }
 
     public function getId(): int {
@@ -31,9 +29,6 @@ class Habilidade implements JsonSerializable {
         return $this->efeito;
     }
 
-    public function getTipo(): Tipo {
-        return $this->tipo;
-    }
 
     public function setId(int $id): void {
         $this->id = $id;
@@ -51,9 +46,6 @@ class Habilidade implements JsonSerializable {
         $this->efeito = $efeito;
     }
 
-    public function setTipo(Tipo $tipo): void {
-        $this->tipo = $tipo;
-    }
 
     public function jsonSerialize(): array{
         return [
@@ -61,7 +53,6 @@ class Habilidade implements JsonSerializable {
             'nome' => $this->nome,
             'descricao' => $this->descricao,
             'efeito' => $this->efeito,
-            'tipo' => $this->tipo
         ];
     }
 }

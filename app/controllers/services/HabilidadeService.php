@@ -2,20 +2,16 @@
 require_once 'app/model/repository/impl/HabilidadeRepository.php';
 
 require_once 'app/model/entities/Habilidade.php';
-require_once 'app/model/entities/Tipo.php';
 require_once 'app/model/entities/Efeito.php';
 
-require_once 'app/model/repository/impl/TipoRepository.php';
 require_once 'app/model/repository/impl/EfeitoRepository.php';
 
 class HabilidadeService extends AbstractService {
     private HabilidadeRepository $habilidadeRepository;
-    private TipoRepository $tipoRepository;
     private EfeitoRepository $efeitoRepository;
 
     public function __construct(){
         $this->habilidadeRepository = new HabilidadeRepository();
-        $this->tipoRepository = new TipoRepository();
         $this->efeitoRepository = new EfeitoRepository();
     }
 
@@ -40,12 +36,11 @@ class HabilidadeService extends AbstractService {
     public function save(){
         $input = json_decode(file_get_contents('php://input'), true);
 
-        if (isset($input['nome']) && isset($input['descricao']) && isset($input['tipo'])){
-            $tipo = $this->tipoRepository->findById($input['tipo']);
+        if (isset($input['id']) && isset($input['nome']) && isset($input['descricao'])){
             $efeito = $this->efeitoRepository->findById($input['efeito']);
             
-            if($tipo && (isset($input['efeito']) ? $efeito : true)){
-                $novaHabilidade = new Habilidade(0, $input['nome'], $input['descricao'], $efeito, $tipo);
+            if((isset($input['efeito']) ? $efeito : true)){
+                $novaHabilidade = new Habilidade($input['id'], $input['nome'], $input['descricao'], $efeito);
                 $this->habilidadeRepository->save($novaHabilidade);
                 http_response_code(201);
                     echo json_encode([
@@ -71,12 +66,11 @@ class HabilidadeService extends AbstractService {
     public function update(int $id){
         $input = json_decode(file_get_contents('php://input'), true);
 
-        if (isset($input['nome']) && isset($input['descricao']) && isset($input['tipo'])){
-            $tipo = $this->tipoRepository->findById($input['tipo']);
+        if (isset($input['nome']) && isset($input['descricao'])){
             $efeito = $this->efeitoRepository->findById($input['efeito']);
             
-            if($tipo && (isset($input['efeito']) ? $efeito : true)){
-                $habilidade = new Habilidade($id, $input['nome'], $input['descricao'], $efeito, $tipo);
+            if((isset($input['efeito']) ? $efeito : true)){
+                $habilidade = new Habilidade($id, $input['nome'], $input['descricao'], $efeito);
                 $habilidadeNova = $this->habilidadeRepository->update($id, $habilidade);
                 if ($habilidadeNova){
                     http_response_code(200);

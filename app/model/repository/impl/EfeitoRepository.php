@@ -39,9 +39,11 @@ class EfeitoRepository implements RepositoryInterface {
     }
 
     public function save($obj): void {
+        $id = $obj->getId();
         $nome = $obj->getNome();
         $descricao = $obj->getInformacao();
-        $stmt = $this->pdo->prepare("INSERT INTO " . self::TABLE . " (Efeito_Nome, Efeito_Info) VALUES (:nome, :descricao)");
+        $stmt = $this->pdo->prepare("INSERT INTO " . self::TABLE . " (Efeito_ID, Efeito_Nome, Efeito_Info) VALUES (:id, :nome, :descricao)");
+        $stmt->bindParam(':id', $id);
         $stmt->bindParam(':nome', $nome);
         $stmt->bindParam(':descricao', $descricao);
         $stmt->execute();

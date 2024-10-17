@@ -24,7 +24,7 @@ class PokemonRepository implements RepositoryInterface {
         SELECT
         * 
         from " . self::TABLE . " as p
-        inner join habilidade h1 on p.Pokemon_Habilidade_1 = h1.habilidade_id 
+        inner join habilidade_passiva h1 on p.Pokemon_Habilidade_1 = h1.habilidade_id 
         ");
         $stmt->execute();
         $result = $stmt->fetchAll();
@@ -33,7 +33,7 @@ class PokemonRepository implements RepositoryInterface {
             $pokemons[] = new Pokemon(
                 $this->pokedexRepository->findById($row['pokemon_id']),
                 $row['pokemon_nome'],
-                new Habilidade($row['habilidade_id'], $row['habilidade_nome'], $row['habilidade_descricao'], $this->efeitoRepository->findById( $row['habilidade_efeito']),$this->tipoRepository->findById($row['habilidade_tipo'])),
+                new Habilidade($row['habilidade_id'], $row['habilidade_nome'], $row['habilidade_descricao'], $this->efeitoRepository->findById( $row['habilidade_efeito'])),
                 $this->habilidadeRepository->findById($row['pokemon_habilidade_2']),
                 $this->habilidadeRepository->findById($row['pokemon_habilidade_3']),
                 $this->habilidadeRepository->findById($row['pokemon_habilidade_4']),
@@ -70,7 +70,7 @@ class PokemonRepository implements RepositoryInterface {
         SELECT
         * 
         from " . self::TABLE . " as p
-        inner join habilidade h1 on p.Pokemon_Habilidade_1 = h1.habilidade_id
+        inner join habilidade_passiva h1 on p.Pokemon_Habilidade_1 = h1.habilidade_id
         where p.pokemon_id = :id");
         $stmt->bindParam(':id', $id);
         $stmt->execute();
@@ -81,7 +81,7 @@ class PokemonRepository implements RepositoryInterface {
         return new Pokemon(
             $this->pokedexRepository->findById($row['pokemon_id']),
             $row['pokemon_nome'],
-            new Habilidade($row['habilidade_id'], $row['habilidade_nome'], $row['habilidade_descricao'], $this->efeitoRepository->findById( $row['habilidade_efeito']),$this->tipoRepository->findById($row['habilidade_tipo'])),
+            new Habilidade($row['habilidade_id'], $row['habilidade_nome'], $row['habilidade_descricao'], $this->efeitoRepository->findById( $row['habilidade_efeito'])),
             $this->habilidadeRepository->findById($row['pokemon_habilidade_2']),
             $this->habilidadeRepository->findById($row['pokemon_habilidade_3']),
             $this->habilidadeRepository->findById($row['pokemon_habilidade_4']),

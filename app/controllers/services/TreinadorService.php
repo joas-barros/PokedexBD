@@ -30,8 +30,8 @@ class TreinadorService extends AbstractService {
     public function save(){
         $input = json_decode(file_get_contents('php://input'), true);
 
-        if (isset($input['nome'])){
-            $novoTreinador = new Treinador(0, $input['nome']);
+        if (isset($input['nome']) && isset($input['email']) && isset($input['senha']) && isset($input['dataNascimento'])){
+            $novoTreinador = new Treinador(0, $input['nome'], $input['email'], $input['senha'], new DateTime($input['dataNascimento']));
             if($novoTreinador){
                 $this->treinadorRepository->save($novoTreinador);
                 http_response_code(201);
@@ -58,8 +58,8 @@ class TreinadorService extends AbstractService {
     public function update(int $id){
         $input = json_decode(file_get_contents('php://input'), true);
 
-        if (isset($input['nome'])){
-            $treinador = new Treinador($id, $input['nome']);
+        if (isset($input['nome']) && isset($input['email']) && isset($input['senha']) && isset($input['dataNascimento'])){
+            $treinador = new Treinador($id, $input['nome'], $input['email'], $input['senha'], new DateTime($input['dataNascimento']));
             
             if($treinador){
                 $treinadorAtualizado = $this->treinadorRepository->update($id, $treinador);

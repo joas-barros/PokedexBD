@@ -2,12 +2,10 @@
 class Tipo implements JsonSerializable {
     private int $id;
     private string $nome;
-    private string $cor;
 
-    public function __construct(int $id = 0, string $nome, string $cor){
+    public function __construct(int $id = 0, string $nome){
         $this->id = $id;
         $this->nome = $nome;
-        $this->cor = $cor;
     }
 
     public function getId(): int {
@@ -18,9 +16,6 @@ class Tipo implements JsonSerializable {
         return $this->nome;
     }
 
-    public function getCor(): string {
-        return $this->cor;
-    }
 
     public function setId(int $id): void {
         $this->id = $id;
@@ -30,15 +25,11 @@ class Tipo implements JsonSerializable {
         $this->nome = $nome;
     }
 
-    public function setCor(string $cor): void {
-        $this->cor = $cor;
-    }
 
     public function jsonSerialize(): array{
         return [
             'id' => $this->id,
-            'nome' => $this->nome,
-            'cor' => $this->cor
+            'nome' => $this->nome
         ];
     }
 }

@@ -27,9 +27,9 @@ class PokedexRepository implements RepositoryInterface {
         $pokemons = [];
         foreach($result as $row){
             $pokemons[] = new Pokedex($row['pokedex_num'], $row['pokedex_nome'], 
-            new Tipo($row['pokedex_tipo_1'], $row['tipo_nome'], $row['cor']),
+            new Tipo($row['pokedex_tipo_1'], $row['tipo_nome']),
             $this->tipoRepository->findById($row['pokedex_tipo_2']),
-            $row['pokedex_taxa_captura'], $row['pokedex_geracao'], $row['pokedex_info']);
+            $row['pokedex_taxa_captura'], $row['pokedex_geracao'], $row['pokedex_info'], $row['pokedex_capturado']);
         }
         return $pokemons;
     }
@@ -53,19 +53,21 @@ class PokedexRepository implements RepositoryInterface {
             return null;
         }
         return new Pokedex($row['pokedex_num'], $row['pokedex_nome'], 
-        new Tipo($row['pokedex_tipo_1'], $row['tipo_nome'], $row['cor']),
+        new Tipo($row['pokedex_tipo_1'], $row['tipo_nome']),
         $this->tipoRepository->findById($row['pokedex_tipo_2']),
-        $row['pokedex_taxa_captura'], $row['pokedex_geracao'], $row['pokedex_info']);
+        $row['pokedex_taxa_captura'], $row['pokedex_geracao'], $row['pokedex_info'], $row['pokedex_capturado']);
     }
 
     public function save($obj): void {
+        $id = $obj->getId();
         $nome = $obj->getNome();
         $tipo1 = $obj->getTipo1()->getId();
         $tipo2 = $obj->getTipo2() ? $obj->getTipo2()->getId() : null;
         $taxaDeCaptura = $obj->getTaxaDeCaptura();
         $geracao = $obj->getGeracao();
         $informacao = $obj->getInformacao();
-        $stmt = $this->pdo->prepare("INSERT INTO " . self::TABLE . " (Pokedex_Nome, Pokedex_Tipo_1, Pokedex_Tipo_2, Pokedex_Taxa_Captura, Pokedex_Geracao, Pokedex_Info) VALUES (:nome, :tipo1, :tipo2, :taxaDeCaptura, :geracao, :informacao)");
+        $stmt = $this->pdo->prepare("INSERT INTO " . self::TABLE . " (Pokedex_Num ,Pokedex_Nome, Pokedex_Tipo_1, Pokedex_Tipo_2, Pokedex_Taxa_Captura, Pokedex_Geracao, Pokedex_Info) VALUES (:id, :nome, :tipo1, :tipo2, :taxaDeCaptura, :geracao, :informacao)");
+        $stmt->bindParam(':id', $id);
         $stmt->bindParam(':nome', $nome);
         $stmt->bindParam(':tipo1', $tipo1);
         $stmt->bindParam(':tipo2', $tipo2);

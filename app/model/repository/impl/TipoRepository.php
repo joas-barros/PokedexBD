@@ -18,7 +18,7 @@ class TipoRepository implements RepositoryInterface {
         $result = $stmt->fetchAll();
         $tipos = [];
         foreach($result as $row){
-            $tipos[] = new Tipo($row['tipo_id'], $row['tipo_nome'], $row['cor']);
+            $tipos[] = new Tipo($row['tipo_id'], $row['tipo_nome']);
         }
         return $tipos;
     }
@@ -36,15 +36,15 @@ class TipoRepository implements RepositoryInterface {
         if($row === false){
             return null;
         }
-        return new Tipo($row['tipo_id'], $row['tipo_nome'], $row['cor']);
+        return new Tipo($row['tipo_id'], $row['tipo_nome']);
     }
 
     public function save($obj): void {
+        $id = $obj->getId();
         $nome = $obj->getNome();
-        $cor = $obj->getCor();
-        $stmt = $this->pdo->prepare("INSERT INTO " . self::TABLE . " (Tipo_Nome, Cor) VALUES (:nome, :cor)");
+        $stmt = $this->pdo->prepare("INSERT INTO " . self::TABLE . " (Tipo_ID, Tipo_Nome) VALUES (:id, :nome)");
+        $stmt->bindParam(':id', $id);
         $stmt->bindParam(':nome', $nome);
-        $stmt->bindParam(':cor', $cor);
         $stmt->execute();
     }
 
@@ -56,15 +56,12 @@ class TipoRepository implements RepositoryInterface {
         }
 
         $tipoAtualizado->setNome($tipo->getNome());
-        $tipoAtualizado->setCor($tipo->getCor());
 
         $nome = $tipoAtualizado->getNome();
-        $cor = $tipoAtualizado->getCor();
 
-        $stmt = $this->pdo->prepare("UPDATE " . self::TABLE . " SET Tipo_Nome = :nome, Cor = :cor WHERE Tipo_ID = :id");
+        $stmt = $this->pdo->prepare("UPDATE " . self::TABLE . " SET Tipo_Nome = :nome WHERE Tipo_ID = :id");
         $stmt->bindParam(':id', $id);
         $stmt->bindParam(':nome', $nome);
-        $stmt->bindParam(':cor', $cor);
         $stmt->execute();
         return $tipoAtualizado;
     }

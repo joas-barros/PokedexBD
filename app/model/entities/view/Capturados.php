@@ -3,7 +3,10 @@
 class Capturados implements JsonSerializable{
     private Pokedex $pokedex;
     private string $nome;
-    private Habilidade $habilidade;
+    private Habilidade $passiva1;
+    private ?Habilidade $passiva2;
+    private ?Habilidade $passiva3;
+    private ?Habilidade $passiva4;
     private int $hp;
     private int $ataque;
     private int $defesa;
@@ -18,10 +21,13 @@ class Capturados implements JsonSerializable{
     private DateTime $data_captura;
 
 
-    public function __construct(Pokedex $pokedex, string $nome, Habilidade $habilidade, int $hp, int $ataque, int $defesa, int $sp_ataque, int $sp_defesa, int $velocidade, int $nivel, string $sexo, float $altura, float $peso_em_kg, string $peso_em_libras, DateTime $data_captura){
+    public function __construct(Pokedex $pokedex, string $nome, ?Habilidade $passiva1, ?Habilidade $passiva2, ?Habilidade $passiva3, ?Habilidade $passiva4, int $hp, int $ataque, int $defesa, int $sp_ataque, int $sp_defesa, int $velocidade, int $nivel, string $sexo, float $altura, float $peso_em_kg, string $peso_em_libras, DateTime $data_captura){
         $this->pokedex = $pokedex;
         $this->nome = $nome;
-        $this->habilidade = $habilidade;
+        $this->passiva1 = $passiva1;
+        $this->passiva2 = $passiva2;
+        $this->passiva3 = $passiva3;
+        $this->passiva4 = $passiva4;
         $this->hp = $hp;
         $this->ataque = $ataque;
         $this->defesa = $defesa;
@@ -52,12 +58,36 @@ class Capturados implements JsonSerializable{
         $this->nome = $nome;
     }
 
-    public function getHabilidade(): Habilidade{
-        return $this->habilidade;
+    public function getPassiva1(): Habilidade{
+        return $this->passiva1;
     }
 
-    public function setHabilidade(Habilidade $habilidade): void{
-        $this->habilidade = $habilidade;
+    public function setPassiva1(Habilidade $passiva1): void{
+        $this->passiva1 = $passiva1;
+    }
+
+    public function getPassiva2(): ?Habilidade{
+        return $this->passiva2;
+    }
+
+    public function setPassiva2(?Habilidade $passiva2): void{
+        $this->passiva2 = $passiva2;
+    }
+
+    public function getPassiva3(): ?Habilidade{
+        return $this->passiva3;
+    }
+
+    public function setPassiva3(?Habilidade $passiva3): void{
+        $this->passiva3 = $passiva3;
+    }
+
+    public function getPassiva4(): ?Habilidade{
+        return $this->passiva4;
+    }
+
+    public function setPassiva4(?Habilidade $passiva4): void{
+        $this->passiva4 = $passiva4;
     }
 
     public function getHp(): int{
@@ -158,9 +188,12 @@ class Capturados implements JsonSerializable{
 
     public function jsonSerialize(): array{
         return [
-            'pokedex' => $this->pokedex->jsonSerialize(),
+            'pokedex' => $this->pokedex,
             'nome' => $this->nome,
-            'habilidade' => $this->habilidade->jsonSerialize(),
+            'passiva1' => $this->passiva1,
+            'passiva2' => $this->passiva2,
+            'passiva3' => $this->passiva3,
+            'passiva4' => $this->passiva4,
             'hp' => $this->hp,
             'ataque' => $this->ataque,
             'defesa' => $this->defesa,

@@ -31,8 +31,12 @@ LANGUAGE 'plpgsql';
 --Ao inserir Pokemons na tabela registro_pokedex, insere automaticamente no arquivo de log
 CREATE OR REPLACE RULE R1 AS
 ON INSERT TO Registro_Pokedex
-DO INSERT INTO Capturados VALUES
+DO INSERT INTO Capturados_Log VALUES
 (retornaNomeTreinador(New.Treinador_Id), retornaNomePokemon(New.Pokemon_Id), now(), now());
+
+CREATE OR REPLACE RULE R2 AS
+ON INSERT TO Registro_Pokedex
+DO UPDATE Pokedex SET Pokedex_Capturado = TRUE WHERE Pokedex_Num = New.Pokemon_ID;
 
 --Função para popular tabela de log
 CREATE OR REPLACE FUNCTION FUNC_LOG()
@@ -56,37 +60,37 @@ $$ LANGUAGE plpgsql;
 
 --Trigger para tabela EFEITO
 CREATE TRIGGER log_efeito
-AFTER INSERT OR UPDATE OR DELETE ON efeito
+AFTER INSERT OR UPDATE OR DELETE ON EFEITO
 FOR EACH ROW EXECUTE FUNCTION func_log();
 
 --TRIGGER PARA TABELA TIPO
 CREATE TRIGGER log_tipo
-AFTER INSERT OR UPDATE OR DELETE ON tipo
+AFTER INSERT OR UPDATE OR DELETE ON TIPO
 FOR EACH ROW EXECUTE FUNCTION func_log();
 
 --TRIGGER PARA TABELA EVOLUCAO
 CREATE TRIGGER log_evolucao
-AFTER INSERT OR UPDATE OR DELETE ON evolucao
+AFTER INSERT OR UPDATE OR DELETE ON EVOLUCAO
 FOR EACH ROW EXECUTE FUNCTION func_log();
 
 --TRIGGER PARA TABELA FRAQUEZAS
 CREATE TRIGGER log_fraquezas
-AFTER INSERT OR UPDATE OR DELETE ON fraquezas
+AFTER INSERT OR UPDATE OR DELETE ON FRAQUEZAS
 FOR EACH ROW EXECUTE FUNCTION func_log();
 
 --TRIGGER PARA TABELA HABILIDADE
 CREATE TRIGGER log_habilidade
-AFTER INSERT OR UPDATE OR DELETE ON habilidade
+AFTER INSERT OR UPDATE OR DELETE ON HABILIDADE_PASSIVA
 FOR EACH ROW EXECUTE FUNCTION func_log();
 
 --TRIGGER PARA TABELA POKEDEX
 CREATE TRIGGER log_pokedex
-AFTER INSERT OR UPDATE OR DELETE ON pokedex
+AFTER INSERT OR UPDATE OR DELETE ON POKEDEX
 FOR EACH ROW EXECUTE FUNCTION func_log();
 
 --TRIGGER PARA TABELA POKEMON
 CREATE TRIGGER log_pokedmon
-AFTER INSERT OR UPDATE OR DELETE ON pokemon
+AFTER INSERT OR UPDATE OR DELETE ON POKEDEX
 FOR EACH ROW EXECUTE FUNCTION func_log();
 
 --FUNÇÃO PARA SORTEAR HP RANDOM
@@ -198,20 +202,34 @@ BEFORE INSERT ON REGISTRO_POKEDEX
 FOR EACH ROW EXECUTE FUNCTION PREENCHER_REGISTRO_POKEDEX();
 
 --Criando VIEW Para Ver os Pokemons Instanciados
-CREATE VIEW Capturados AS 
-(SELECT A.Pokemon_ID AS Numero,
-E.Pokemon_Nome AS Nome,
-E.Pokemon_Habilidade_1 AS Habilidade,
-A.Pokemon_Hp AS HP, A.Pokemon_Atk AS Ataque, 
-A.Pokemon_Def AS Defesa, A.Pokemon_Sp_Atk AS SP_Ataque,
-A.Pokemon_Sp_Def AS SP_Defesa, A.Pokemon_Velocidade AS VELOCIDADE,
-A.Pokemon_Level AS Nivel, 
-E.Pokemon_Sexo AS Sexo, E.Pokemon_Altura AS Altura, 
-E.Pokemon_Peso AS Peso_em_KG,
-KGPARALBS(E.Pokemon_Peso) AS Peso_em_Libras,
-A.Pokemon_Data_Captura AS Data_Captura
-FROM Registro_Pokedex AS A, Pokemon AS E
-WHERE A.Pokemon_ID = E.Pokemon_ID
-)
+CREATE VIEW Capturados AS (
+    SELECT 
+        A.Pokemon_ID AS Numero,
+        E.Pokemon_Nome AS Nome,
+        E.Pokemon_Habilidade_1 AS Passiva1,
+        E.Pokemon_Habilidade_2 AS Passiva2,
+        E.Pokemon_Habilidade_3 AS Passiva3,
+        E.Pokemon_Habilidade_4 AS Passiva4,
+        A.Pokemon_Hp AS HP,
+        A.Pokemon_Atk AS Ataque,
+        A.Pokemon_Def AS Defesa,
+        A.Pokemon_Sp_Atk AS SP_Ataque,
+        A.Pokemon_Sp_Def AS SP_Defesa,
+        A.Pokemon_Velocidade AS VELOCIDADE,
+        A.Pokemon_Level AS Nivel,
+        E.Pokemon_Sexo AS Sexo,
+        E.Pokemon_Altura AS Altura,
+        E.Pokemon_Peso AS Peso_em_KG,
+        KGPARALBS(E.Pokemon_Peso) AS Peso_em_Libras,
+        A.Pokemon_Data_Captura AS Data_Captura
+    FROM 
+        Registro_Pokedex AS A 
+    JOIN 
+        Pokemon AS E
+    ON 
+        A.Pokemon_ID = E.Pokemon_ID
+    WHERE 
+        A.Pokemon_ID = E.Pokemon_ID
+);
 
-select * from Capturados;
+select * from capturados;

@@ -26,7 +26,7 @@ class PDF{
         $pdf->Cell(10, 10, 'ID', 1, 0, 'C');
         $pdf->Cell(50, 10, 'Operacao', 1, 0, 'C');
         $pdf->Cell(50, 10, 'Nome da Tabela', 1, 0, 'C');
-        $pdf->Cell(80, 10, 'Data de Captura', 1, 1, 'C');
+        $pdf->Cell(80, 10, 'Data da operacao', 1, 1, 'C');
 
         $pdf->SetFont('Arial', '', 12);
         foreach($result as $row){

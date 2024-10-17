@@ -4,15 +4,15 @@ class RegistroPokedex implements JsonSerializable {
     private Pokedex $pokemon;
     private Treinador $treinador;
     private DateTime $dataCaptura;
-    private int $hp;
-    private int $ataque;
-    private int $defesa;
-    private int $ataqueEspecial;
-    private int $defesaEspecial;
-    private int $velocidade;
-    private int $nivel;
+    private ?int $hp;
+    private ?int $ataque;
+    private ?int $defesa;
+    private ?int $ataqueEspecial;
+    private ?int $defesaEspecial;
+    private ?int $velocidade;
+    private ?int $nivel;
 
-    public function __construct(Pokedex $pokemon, Treinador $treinador, DateTime $dataCaptura = null, int $hp= null, int $ataque= null, int $defesa= null, int $ataqueEspecial= null, int $defesaEspecial= null, int $velocidade= null, int $nivel= null) {
+    public function __construct(Pokedex $pokemon, Treinador $treinador, DateTime $dataCaptura, int $hp= null, int $ataque= null, int $defesa= null, int $ataqueEspecial= null, int $defesaEspecial= null, int $velocidade= null, int $nivel= null) {
         $this->pokemon = $pokemon;
         $this->treinador = $treinador;
         $this->dataCaptura = $dataCaptura;

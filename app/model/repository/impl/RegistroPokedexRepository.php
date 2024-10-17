@@ -31,7 +31,7 @@ class RegistroPokedexRepository implements RepositoryInterface {
         foreach($result as $row){
             $registros[] = new RegistroPokedex(
                 new Pokedex($row['pokedex_num'], $row['pokedex_nome'], $this->tipoRepository->findById($row['pokedex_tipo_1']), $this->tipoRepository->findById($row['pokedex_tipo_2']), $row['pokedex_taxa_captura'], $row['pokedex_geracao'], $row['pokedex_info']),
-                new Treinador($row['treinador_id'], $row['treinador_nome']),
+                new Treinador($row['treinador_id'], $row['treinador_nome'], $row['treinador_email'], $row['treinador_senha'], new DateTime($row['treinador_data_nascimento'])),
                 new DateTime($row['pokemon_data_captura']),
                 $row['pokemon_hp'],
                 $row['pokemon_atk'],
@@ -65,7 +65,7 @@ class RegistroPokedexRepository implements RepositoryInterface {
         }
         return new RegistroPokedex(
             new Pokedex($row['pokedex_num'], $row['pokedex_nome'], $this->tipoRepository->findById($row['pokedex_tipo_1']), $this->tipoRepository->findById($row['pokedex_tipo_2']), $row['pokedex_taxa_captura'], $row['pokedex_geracao'], $row['pokedex_info']),
-            new Treinador($row['treinador_id'], $row['treinador_nome']),
+            new Treinador($row['treinador_id'], $row['treinador_nome'], $row['treinador_email'], $row['treinador_senha'], new DateTime($row['treinador_data_nascimento'])),
             new DateTime($row['pokemon_data_captura']),
             $row['pokemon_hp'],
             $row['pokemon_atk'],

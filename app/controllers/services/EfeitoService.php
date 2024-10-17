@@ -28,8 +28,8 @@ class EfeitoService extends AbstractService {
     public function save(){
         $input = json_decode(file_get_contents('php://input'), true);
 
-        if (isset($input['nome']) && isset($input['informacao'])){
-            $novoEfeito = new Efeito(0, $input['nome'], $input['informacao']);
+        if (isset($input['id']) && isset($input['nome']) && isset($input['informacao'])){
+            $novoEfeito = new Efeito($input['id'], $input['nome'], $input['informacao']);
             if($novoEfeito){
                 $this->efeitoRepository->save($novoEfeito);
                 http_response_code(201);

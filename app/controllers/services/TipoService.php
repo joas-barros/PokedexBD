@@ -31,8 +31,8 @@ class TipoService extends AbstractService {
     public function save(){
         $input = json_decode(file_get_contents('php://input'), true);
 
-        if (isset($input['nome']) && isset($input['cor'])){
-            $novoTipo = new Tipo(0, $input['nome'], $input['cor']);
+        if (isset($input['nome']) && isset($input['id'])){
+            $novoTipo = new Tipo($input['id'], $input['nome']);
             if($novoTipo){
                 $this->tipoRepository->save($novoTipo);
                 http_response_code(201);
@@ -59,8 +59,8 @@ class TipoService extends AbstractService {
     public function update(int $id){
         $input = json_decode(file_get_contents('php://input'), true);
 
-        if (isset($input['nome']) && isset($input['cor'])){
-            $tipo = new Tipo($id, $input['nome'], $input['cor']);
+        if (isset($input['nome'])){
+            $tipo = new Tipo($id, $input['nome']);
             if($tipo){
                 $tipoAtualizado = $this->tipoRepository->update($id, $tipo);
                 if (!$tipoAtualizado){

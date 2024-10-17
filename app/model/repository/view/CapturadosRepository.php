@@ -26,7 +26,10 @@ class CapturadosRepository{
             $capturados[] = new Capturados(
                 $this->pokedexRepository->findById($row['numero']),
                 $row['nome'],
-                $this->habilidadeRepository->findById($row['habilidade']),
+                $this->habilidadeRepository->findById($row['passiva1']),
+                $this->habilidadeRepository->findById($row['passiva2']),
+                $this->habilidadeRepository->findById($row['passiva3']),
+                $this->habilidadeRepository->findById($row['passiva4']),
                 $row['hp'],
                 $row['ataque'],
                 $row['defesa'],
@@ -55,7 +58,10 @@ class CapturadosRepository{
         return new Capturados(
             $this->pokedexRepository->findById($row['numero']),
             $row['nome'],
-            $this->habilidadeRepository->findById($row['habilidade']),
+            $this->habilidadeRepository->findById($row['passiva1']),
+            $this->habilidadeRepository->findById($row['passiva2']),
+            $this->habilidadeRepository->findById($row['passiva3']),
+            $this->habilidadeRepository->findById($row['passiva4']),
             $row['hp'],
             $row['ataque'],
             $row['defesa'],

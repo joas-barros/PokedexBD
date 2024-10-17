@@ -17,7 +17,7 @@ class TreinadorRepository implements RepositoryInterface {
         $result = $stmt->fetchAll();
         $treinadores = [];
         foreach($result as $row){
-            $treinadores[] = new Treinador($row['treinador_id'], $row['treinador_nome']);
+            $treinadores[] = new Treinador($row['treinador_id'], $row['treinador_nome'], $row['treinador_email'], $row['treinador_senha'], new DateTime($row['treinador_data_nascimento']));
         }
         return $treinadores;
     }
@@ -35,13 +35,19 @@ class TreinadorRepository implements RepositoryInterface {
         if($result === false){
             return null;
         }
-        return new Treinador($result['treinador_id'], $result['treinador_nome']);
+        return new Treinador($result['treinador_id'], $result['treinador_nome'], $result['treinador_email'], $result['treinador_senha'], new DateTime($result['treinador_data_nascimento']));
     }
 
     public function save($treinador): void{
         $treinadorNome = $treinador->getNome();
-        $stmt = $this->pdo->prepare(" INSERT INTO " . self::TABLE . " (treinador_nome) VALUES (:nome)");
+        $treinadorEmail = $treinador->getEmail();
+        $treinadorSenha = $treinador->getSenha();
+        $treinadorDataNascimento = $treinador->getDataNascimento()->format('Y-m-d');
+        $stmt = $this->pdo->prepare(" INSERT INTO " . self::TABLE . " (treinador_nome, treinador_email, treinador_senha, treinador_data_nascimento) VALUES (:nome, :email, :senha, :dataNascimento)");
         $stmt->bindParam(':nome', $treinadorNome);
+        $stmt->bindParam(':email', $treinadorEmail);
+        $stmt->bindParam(':senha', $treinadorSenha);
+        $stmt->bindParam(':dataNascimento', $treinadorDataNascimento);
         $stmt->execute();
     }
 
@@ -52,11 +58,26 @@ class TreinadorRepository implements RepositoryInterface {
         }
 
         $novoNome = $treinador->getNome();
+        $novoEmail = $treinador->getEmail();
+        $novaSenha = $treinador->getSenha();
+        $novaDataNascimento = $treinador->getDataNascimento()->format('Y-m-d');
 
         $treinadorNovo->setNome($novoNome);
+        $treinadorNovo->setEmail($novoEmail);
+        $treinadorNovo->setSenha($novaSenha);
+        $treinadorNovo->setDataNascimento(new DateTime($novaDataNascimento));
         
-        $stmt = $this->pdo->prepare(" UPDATE " . self::TABLE . " SET treinador_nome = :nome WHERE treinador_id = :id");
+        $stmt = $this->pdo->prepare(" UPDATE " . self::TABLE . " 
+            SET 
+            treinador_nome = :nome, 
+            treinador_email = :email,
+            treinador_senha = :senha,
+            treinador_data_nascimento = :dataNascimento
+            WHERE treinador_id = :id");
         $stmt->bindParam(':nome', $novoNome);
+        $stmt->bindParam(':email', $novoEmail);
+        $stmt->bindParam(':senha', $novaSenha);
+        $stmt->bindParam(':dataNascimento', $novaDataNascimento);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
 
