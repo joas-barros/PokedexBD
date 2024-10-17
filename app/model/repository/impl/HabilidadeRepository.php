@@ -14,7 +14,7 @@ class HabilidadeRepository implements RepositoryInterface {
     }
 
     public function findAll(): array {
-        $stmt = $this->pdo->prepare("SELECT * FROM " . self::TABLE);
+        $stmt = $this->pdo->prepare("SELECT * FROM " . self::TABLE . " ORDER BY habilidade_id ASC");
         $stmt->execute();
         $result = $stmt->fetchAll();
         $habilidades = [];

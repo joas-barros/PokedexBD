@@ -29,7 +29,7 @@ class RegistroPokedexService extends AbstractService {
             http_response_code(404);
             echo json_encode([
                 'status' => 'error',
-                'message' => 'Registro não encontrado'
+                'message' => 'Esse usurário não possui pokemons capturados'
             ]);
         }
     }

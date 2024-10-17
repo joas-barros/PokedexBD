@@ -25,7 +25,7 @@ class PokemonRepository implements RepositoryInterface {
         * 
         from " . self::TABLE . " as p
         inner join habilidade_passiva h1 on p.Pokemon_Habilidade_1 = h1.habilidade_id 
-        ");
+        ORDER BY pokemon_id ASC");
         $stmt->execute();
         $result = $stmt->fetchAll();
         $pokemons = [];

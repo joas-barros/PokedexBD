@@ -21,6 +21,7 @@ class PokedexRepository implements RepositoryInterface {
             *
         FROM " . self::TABLE . " 
         INNER JOIN tipo t1 ON pokedex.Pokedex_Tipo_1 = t1.Tipo_ID
+        ORDER BY Pokedex_Num ASC
     ");
         $stmt->execute();
         $result = $stmt->fetchAll();

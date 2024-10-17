@@ -22,7 +22,7 @@ class CapturadosService{
             http_response_code(404);
             echo json_encode([
                 'status' => 'error',
-                'message' => 'Capturado não encontrado'
+                'message' => 'Treinador não capturou nenhum pokemon.'
             ]);
         }
     }

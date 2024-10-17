@@ -12,7 +12,7 @@ class EfeitoRepository implements RepositoryInterface {
     }
 
     public function findAll(): array {
-        $stmt = $this->pdo->prepare("SELECT * FROM " . self::TABLE);
+        $stmt = $this->pdo->prepare("SELECT * FROM " . self::TABLE . " ORDER BY Efeito_ID ASC");
         $stmt->execute();
         $result = $stmt->fetchAll();
         $efeitos = [];

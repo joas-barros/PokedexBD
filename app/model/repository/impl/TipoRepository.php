@@ -13,7 +13,7 @@ class TipoRepository implements RepositoryInterface {
     }
 
     public function findAll(): array {
-        $stmt = $this->pdo->prepare("SELECT * FROM " . self::TABLE);
+        $stmt = $this->pdo->prepare("SELECT * FROM " . self::TABLE . " ORDER BY tipo_id ASC");
         $stmt->execute();
         $result = $stmt->fetchAll();
         $tipos = [];

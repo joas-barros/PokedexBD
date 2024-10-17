@@ -11,7 +11,7 @@ class EvolucaoRepository {
     }
 
     public function findAll(): array {
-        $stmt = $this->pdo->prepare("SELECT * FROM " . self::TABLE);
+        $stmt = $this->pdo->prepare("SELECT * FROM " . self::TABLE . " ORDER BY Anterior ASC");
         $stmt->execute();
         $result = $stmt->fetchAll();
         $evolucoes = [];

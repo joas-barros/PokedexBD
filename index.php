@@ -54,7 +54,7 @@ $id = $_GET['id'] ?? null;
 // }
 
 // Instanciar o controller
-  $controller = new RegistroPokedexResource();
+  $controller = new CapturadosResource();
   $controller->handleRequest($method, $id);
 
 //PDF::generateAdmLogPDF();

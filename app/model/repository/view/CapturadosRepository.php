@@ -25,6 +25,7 @@ class CapturadosRepository{
         foreach($result as $row){
             $capturados[] = new Capturados(
                 $this->pokedexRepository->findById($row['numero']),
+                $row['treinador'],
                 $row['nome'],
                 $this->habilidadeRepository->findById($row['passiva1']),
                 $this->habilidadeRepository->findById($row['passiva2']),
@@ -41,40 +42,49 @@ class CapturadosRepository{
                 $row['altura'],
                 $row['peso_em_kg'],
                 $row['peso_em_libras'],
+                $row['total'],
                 new DateTime($row['data_captura'])
             );
         }
         return $capturados;
     }
 
-    public function findById(int $id): ?Capturados{
-        $stmt = $this->pdo->prepare('SELECT * FROM ' . self::VIEW . ' WHERE numero = :id');
+    public function findById(int $id): ?array{
+        $stmt = $this->pdo->prepare('SELECT * FROM ' . self::VIEW . ' WHERE treinador = :id');
         $stmt->bindParam(':id', $id);
         $stmt->execute();
-        $row = $stmt->fetch();
-        if($row === false){
+        $result = $stmt->fetchAll();
+
+        if (count($result) === 0){
             return null;
         }
-        return new Capturados(
-            $this->pokedexRepository->findById($row['numero']),
-            $row['nome'],
-            $this->habilidadeRepository->findById($row['passiva1']),
-            $this->habilidadeRepository->findById($row['passiva2']),
-            $this->habilidadeRepository->findById($row['passiva3']),
-            $this->habilidadeRepository->findById($row['passiva4']),
-            $row['hp'],
-            $row['ataque'],
-            $row['defesa'],
-            $row['sp_ataque'],
-            $row['sp_defesa'],
-            $row['velocidade'],
-            $row['nivel'],
-            $row['sexo'],
-            $row['altura'],
-            $row['peso_em_kg'],
-            $row['peso_em_libras'],
-            new DateTime($row['data_captura'])
-        );
+
+        $capturados = [];
+        foreach($result as $row){
+            $capturados[] = new Capturados(
+                $this->pokedexRepository->findById($row['numero']),
+                $row['treinador'],
+                $row['nome'],
+                $this->habilidadeRepository->findById($row['passiva1']),
+                $this->habilidadeRepository->findById($row['passiva2']),
+                $this->habilidadeRepository->findById($row['passiva3']),
+                $this->habilidadeRepository->findById($row['passiva4']),
+                $row['hp'],
+                $row['ataque'],
+                $row['defesa'],
+                $row['sp_ataque'],
+                $row['sp_defesa'],
+                $row['velocidade'],
+                $row['nivel'],
+                $row['sexo'],
+                $row['altura'],
+                $row['peso_em_kg'],
+                $row['peso_em_libras'],
+                $row['total'],
+                new DateTime($row['data_captura'])
+            );
+        }
+        return $capturados;
     }
 
 

@@ -2,6 +2,7 @@
 
 class Capturados implements JsonSerializable{
     private Pokedex $pokedex;
+    private int $idTreinador;
     private string $nome;
     private Habilidade $passiva1;
     private ?Habilidade $passiva2;
@@ -18,11 +19,13 @@ class Capturados implements JsonSerializable{
     private float $altura;
     private float $peso_em_kg;
     private string $peso_em_libras;
+    private int $total;
     private DateTime $data_captura;
 
 
-    public function __construct(Pokedex $pokedex, string $nome, ?Habilidade $passiva1, ?Habilidade $passiva2, ?Habilidade $passiva3, ?Habilidade $passiva4, int $hp, int $ataque, int $defesa, int $sp_ataque, int $sp_defesa, int $velocidade, int $nivel, string $sexo, float $altura, float $peso_em_kg, string $peso_em_libras, DateTime $data_captura){
+    public function __construct(Pokedex $pokedex, int $idTreinador, string $nome, ?Habilidade $passiva1, ?Habilidade $passiva2, ?Habilidade $passiva3, ?Habilidade $passiva4, int $hp, int $ataque, int $defesa, int $sp_ataque, int $sp_defesa, int $velocidade, int $nivel, string $sexo, float $altura, float $peso_em_kg, string $peso_em_libras, int $total, DateTime $data_captura){
         $this->pokedex = $pokedex;
+        $this->idTreinador = $idTreinador;
         $this->nome = $nome;
         $this->passiva1 = $passiva1;
         $this->passiva2 = $passiva2;
@@ -39,6 +42,7 @@ class Capturados implements JsonSerializable{
         $this->altura = $altura;
         $this->peso_em_kg = $peso_em_kg;
         $this->peso_em_libras = $peso_em_libras;
+        $this->total = $total;
         $this->data_captura = $data_captura;
     }
 
@@ -186,9 +190,26 @@ class Capturados implements JsonSerializable{
         $this->data_captura = $data_captura;
     }
 
+    public function getIdTreinador(): int{
+        return $this->idTreinador;
+    }
+
+    public function setIdTreinador(int $idTreinador): void{
+        $this->idTreinador = $idTreinador;
+    }
+
+    public function getTotal(): int{
+        return $this->total;
+    }
+
+    public function setTotal(int $total): void{
+        $this->total = $total;
+    }
+
     public function jsonSerialize(): array{
         return [
             'pokedex' => $this->pokedex,
+            'idTreinador' => $this->idTreinador,
             'nome' => $this->nome,
             'passiva1' => $this->passiva1,
             'passiva2' => $this->passiva2,
@@ -205,6 +226,7 @@ class Capturados implements JsonSerializable{
             'altura' => $this->altura,
             'peso_em_kg' => $this->peso_em_kg,
             'peso_em_libras' => $this->peso_em_libras,
+            'total' => $this->total,
             'data_captura' => $this->data_captura->format('Y-m-d')
         ];
     }

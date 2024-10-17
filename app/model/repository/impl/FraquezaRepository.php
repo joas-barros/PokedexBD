@@ -16,7 +16,7 @@ class FraquezaRepository implements RepositoryInterface {
     }
 
     public function findAll(): array {
-        $stmt = $this->connection->query('SELECT * FROM ' . self::TABLE);
+        $stmt = $this->connection->query('SELECT * FROM ' . self::TABLE . ' ORDER BY tipo_id ASC');
         $result = $stmt->fetchAll();
 
         $fraquezas = [];

@@ -45,7 +45,7 @@ class RegistroPokedexRepository implements RepositoryInterface {
         return $registros;
     }
 
-    public function findById(?int $id): ?RegistroPokedex {
+    public function findById(?int $id): ?array {
 
         if ($id === null){
             return null;
@@ -55,26 +55,28 @@ class RegistroPokedexRepository implements RepositoryInterface {
         SELECT * FROM " . self::TABLE . 
         " INNER JOIN pokedex ON registro_pokedex.pokemon_id = pokedex.pokedex_num 
         INNER JOIN treinador ON registro_pokedex.treinador_id = treinador.treinador_id
-        WHERE pokemon_id = :id
+        WHERE registro_pokedex.treinador_id = :id
         ");
         $stmt->bindParam(':id', $id);
         $stmt->execute();
-        $row = $stmt->fetch();
-        if($row === false){
-            return null;
+
+        $result = $stmt->fetchAll();
+        $registros = [];
+        foreach($result as $row){
+            $registros[] = new RegistroPokedex(
+                new Pokedex($row['pokedex_num'], $row['pokedex_nome'], $this->tipoRepository->findById($row['pokedex_tipo_1']), $this->tipoRepository->findById($row['pokedex_tipo_2']), $row['pokedex_taxa_captura'], $row['pokedex_geracao'], $row['pokedex_info']),
+                new Treinador($row['treinador_id'], $row['treinador_nome'], $row['treinador_email'], $row['treinador_senha'], new DateTime($row['treinador_data_nascimento'])),
+                new DateTime($row['pokemon_data_captura']),
+                $row['pokemon_hp'],
+                $row['pokemon_atk'],
+                $row['pokemon_def'],
+                $row['pokemon_sp_atk'],
+                $row['pokemon_sp_def'],
+                $row['pokemon_velocidade'],
+                $row['pokemon_level']
+            );
         }
-        return new RegistroPokedex(
-            new Pokedex($row['pokedex_num'], $row['pokedex_nome'], $this->tipoRepository->findById($row['pokedex_tipo_1']), $this->tipoRepository->findById($row['pokedex_tipo_2']), $row['pokedex_taxa_captura'], $row['pokedex_geracao'], $row['pokedex_info']),
-            new Treinador($row['treinador_id'], $row['treinador_nome'], $row['treinador_email'], $row['treinador_senha'], new DateTime($row['treinador_data_nascimento'])),
-            new DateTime($row['pokemon_data_captura']),
-            $row['pokemon_hp'],
-            $row['pokemon_atk'],
-            $row['pokemon_def'],
-            $row['pokemon_sp_atk'],
-            $row['pokemon_sp_def'],
-            $row['pokemon_velocidade'],
-            $row['pokemon_level']
-        );
+        return $registros;
     }
 
     public function save($obj): void {
@@ -90,11 +92,33 @@ class RegistroPokedexRepository implements RepositoryInterface {
     }
 
     public function update(int $id, $obj): ?RegistroPokedex {
-        $registroAtualizado = $this->findById($id);
 
-        if($registroAtualizado === null){
+        $find = $this->pdo->prepare("
+        SELECT * FROM " . self::TABLE . 
+        " INNER JOIN pokedex ON registro_pokedex.pokemon_id = pokedex.pokedex_num 
+        INNER JOIN treinador ON registro_pokedex.treinador_id = treinador.treinador_id
+        WHERE registro_pokedex.pokedex_num = :id
+        ");
+        $find->bindParam(':id', $id);
+        $find->execute();
+        $result = $find->fetch();
+
+        if ($result === false){
             return null;
         }
+
+        $registroAtualizado = new RegistroPokedex(
+            new Pokedex($result['pokedex_num'], $result['pokedex_nome'], $this->tipoRepository->findById($result['pokedex_tipo_1']), $this->tipoRepository->findById($result['pokedex_tipo_2']), $result['pokedex_taxa_captura'], $result['pokedex_geracao'], $result['pokedex_info']),
+            new Treinador($result['treinador_id'], $result['treinador_nome'], $result['treinador_email'], $result['treinador_senha'], new DateTime($result['treinador_data_nascimento'])),
+            new DateTime($result['pokemon_data_captura']),
+            $result['pokemon_hp'],
+            $result['pokemon_atk'],
+            $result['pokemon_def'],
+            $result['pokemon_sp_atk'],
+            $result['pokemon_sp_def'],
+            $result['pokemon_velocidade'],
+            $result['pokemon_level']
+        );
 
         $registroAtualizado->setTreinador($obj->getTreinador());
         $registroAtualizado->setHp($obj->getHp());
@@ -134,12 +158,12 @@ class RegistroPokedexRepository implements RepositoryInterface {
         return $registroAtualizado;
     }
 
-    public function delete(int $id): void {
+    public function delete(int $idTreinador): void {
         $stmt = $this->pdo->prepare("
         DELETE FROM " . self::TABLE . " 
-        WHERE pokemon_id = :id
+        WHERE treinador_id = :id
         ");
-        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':id', $idTreinador);
         $stmt->execute();
     }
 
