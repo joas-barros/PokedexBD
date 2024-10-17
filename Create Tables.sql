@@ -97,8 +97,8 @@ CONSTRAINT CHECK_PESO CHECK(Pokemon_Peso > 0)
 CREATE TABLE TREINADOR(
 Treinador_ID Serial PRIMARY KEY,
 Treinador_Nome Text NOT NULL,
-Treinador_Email Text NOT NULL,
-Treinador_Senha Text UNIQUE NOT NULL,
+Treinador_Email Text UNIQUE NOT NULL,
+Treinador_Senha Text NOT NULL,
 Treinador_Data_Nascimento Date NOT NULL
 );
 
