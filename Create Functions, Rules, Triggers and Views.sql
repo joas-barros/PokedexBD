@@ -93,6 +93,24 @@ CREATE TRIGGER log_pokedmon
 AFTER INSERT OR UPDATE OR DELETE ON POKEDEX
 FOR EACH ROW EXECUTE FUNCTION func_log();
 
+--Função para retornar o total de stats
+CREATE OR REPLACE FUNCTION calcular_total(Num Int)
+Returns Int AS $$
+DECLARE
+Total Int;
+HP Int;
+Ataque Int;
+Defesa Int;
+Sp_Atk Int;
+Sp_Def Int;
+Velocidade Int;
+BEGIN
+SELECT Pokemon_HP, Pokemon_Atk, Pokemon_Def, Pokemon_SP_Atk, Pokemon_Sp_Def, Pokemon_Velocidade INTO HP, Ataque, Defesa, Sp_Atk, SP_Def, Velocidade FROM Registro_Pokedex WHERE Pokemon_ID = Num; 
+Total := HP + Ataque + Defesa + Sp_Atk + SP_Def + Velocidade;
+RETURN Total;
+END;
+$$ LANGUAGE 'plpgsql';
+
 --FUNÇÃO PARA SORTEAR HP RANDOM
 CREATE OR REPLACE FUNCTION gerar_HP (Num Int)
 RETURNS Int AS $$
@@ -205,22 +223,24 @@ FOR EACH ROW EXECUTE FUNCTION PREENCHER_REGISTRO_POKEDEX();
 CREATE VIEW Capturados AS (
     SELECT 
         A.Pokemon_ID AS Numero,
+        A.Treinador_ID AS Treinador,
         E.Pokemon_Nome AS Nome,
         E.Pokemon_Habilidade_1 AS Passiva1,
         E.Pokemon_Habilidade_2 AS Passiva2,
         E.Pokemon_Habilidade_3 AS Passiva3,
         E.Pokemon_Habilidade_4 AS Passiva4,
+        E.Pokemon_Sexo AS Sexo,
+        E.Pokemon_Altura AS Altura,
+        E.Pokemon_Peso AS Peso_em_KG,
+        KGPARALBS(E.Pokemon_Peso) AS Peso_em_Libras,
+        A.Pokemon_Level AS Nivel,
         A.Pokemon_Hp AS HP,
         A.Pokemon_Atk AS Ataque,
         A.Pokemon_Def AS Defesa,
         A.Pokemon_Sp_Atk AS SP_Ataque,
         A.Pokemon_Sp_Def AS SP_Defesa,
-        A.Pokemon_Velocidade AS VELOCIDADE,
-        A.Pokemon_Level AS Nivel,
-        E.Pokemon_Sexo AS Sexo,
-        E.Pokemon_Altura AS Altura,
-        E.Pokemon_Peso AS Peso_em_KG,
-        KGPARALBS(E.Pokemon_Peso) AS Peso_em_Libras,
+        A.Pokemon_Velocidade AS Velocidade,
+        calcular_total(A.Pokemon_ID) AS Total,
         A.Pokemon_Data_Captura AS Data_Captura
     FROM 
         Registro_Pokedex AS A 
